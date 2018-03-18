@@ -1,4 +1,4 @@
-package com.stroage.cloud.viewmodel;
+package com.stroage.cloud.viewmodel.login;
 
 import android.view.View;
 

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('C:/Users/Administrator/Desktop/yifeng/cloudstroage.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.stroage.cloud"
@@ -14,59 +22,50 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
         }
     }
-
     dataBinding {
         enabled = true
+    }
+    productFlavors {
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-
     //dagger
     annotationProcessor rootProject.ext.daggerCompiler
     implementation rootProject.ext.daggerGlassfish
     implementation rootProject.ext.dagger
-
     //support lib
     implementation rootProject.ext.supportLibAppCompat
     implementation rootProject.ext.supportLibDesign
     implementation rootProject.ext.supportLibCardView
-
     //rxjava
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.retrofitRxAdapter
-
     //rxAndroid & rxBinding
     implementation rootProject.ext.rxAndroid
     implementation rootProject.ext.rxBinding
-
     //AndroidStudio3.0 databing libary
     implementation rootProject.ext.databindinglibary
     implementation rootProject.ext.databinndingadapter
-
     //retrofit
     implementation rootProject.ext.retrofit
     implementation rootProject.ext.gsonConverter
     implementation rootProject.ext.retrofitLogging
-
     //ui
     implementation rootProject.ext.picasso
     implementation rootProject.ext.materialDialog
     implementation rootProject.ext.circleImage
-
     //Parceler
     implementation rootProject.ext.parcelerApi
     annotationProcessor rootProject.ext.parceler
-
     implementation rootProject.ext.nicespinner
-
-
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-
 }

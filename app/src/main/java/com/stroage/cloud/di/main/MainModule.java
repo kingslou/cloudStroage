@@ -17,10 +17,17 @@ import dagger.Provides;
 @Module
 public class MainModule {
 
+    MainViewModel.DeviceInfoListener deviceInfoListener;
+    MainUseCaseImp mainUseCaseImp;
+
+    public MainModule(MainViewModel.DeviceInfoListener listener){
+        this.deviceInfoListener = listener;
+    }
+
     @Provides
     @Activity
     public MainViewModel provideMainViewModel(){
-        return  new MainViewModel();
+        return new MainViewModel(deviceInfoListener,mainUseCaseImp);
     }
 
     @Provides

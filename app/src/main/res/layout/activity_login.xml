@@ -7,7 +7,7 @@
             type="com.stroage.cloud.model.pojo.LoginPoJo"></variable>
         <variable
             name="clickLogin"
-            type="com.stroage.cloud.viewmodel.LoginViewModel"></variable>
+            type="com.stroage.cloud.viewmodel.login.LoginViewModel"></variable>
     </data>
 
     <LinearLayout

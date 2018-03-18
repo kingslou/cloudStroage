@@ -3,25 +3,20 @@ package com.stroage.cloud.view.login;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.stroage.cloud.R;
 import com.stroage.cloud.StorageCloudApp;
 import com.stroage.cloud.databinding.ActivityLoginBinding;
-import com.stroage.cloud.di.app.DaggerAppComponent;
 import com.stroage.cloud.di.login.DaggerLoginComponent;
 import com.stroage.cloud.di.login.LoginModule;
 import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.utils.DialogBuilder;
 import com.stroage.cloud.view.main.MainActivity;
-import com.stroage.cloud.viewmodel.LoginViewModel;
+import com.stroage.cloud.viewmodel.login.LoginViewModel;
 
 import javax.inject.Inject;
 

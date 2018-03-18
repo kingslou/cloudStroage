@@ -3,7 +3,7 @@ package com.stroage.cloud.di.login;
 import com.stroage.cloud.di.Activity;
 import com.stroage.cloud.domain.login.LoginUseCaseImp;
 import com.stroage.cloud.model.api.ApiSource;
-import com.stroage.cloud.viewmodel.LoginViewModel;
+import com.stroage.cloud.viewmodel.login.LoginViewModel;
 
 import dagger.Module;
 import dagger.Provides;
