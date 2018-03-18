@@ -6,6 +6,8 @@ import com.stroage.cloud.model.usefeed.LoginFeed;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * @author Administrator
@@ -24,6 +26,6 @@ public class LoginUseCaseImp implements LoginUseCase {
 
     @Override
     public Observable<LoginFeed> login(String loginName, String loginPwd) {
-        return null;
+        return apiSource.login(loginName,loginPwd).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }
