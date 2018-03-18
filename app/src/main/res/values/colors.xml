@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#04B0E0</color>
+    <color name="colorPrimaryDark">#04B0E0</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="blue">#ff33b5e5</color>
+    <!-- divide line  -->
+    <!--<color name="color_divide_line_grey">#e5e5e5</color>-->
+    <color name="color_divide_line_grey">#f0f0f0</color>
+    <!-- navigation -->
+    <color name="color_navigation_btn_grey">#d6d6d6</color>
+    <color name="color_navigation_background">#d6d6d6</color>
+    <!-- heading -->
+    <color name="color_heading_black">#3d3d3d</color>
+    <!-- action -->
+    <color name="color_action_blue">#5e82fe</color>
+    <color name="color_action_grey">#b3b3b3</color>
+    <!-- label -->
+    <color name="color_label_black">#3d3d3d</color>
+    <color name="color_label_white">#FFFFFF</color>
+    <color name="color_label_black_grey">#808080</color>
+    <color name="color_label_light_grey">#55b3b3b3</color>
+    <!-- tip -->
+    <color name="color_input_tip_grey">#b3b3b3</color>
+    <color name="color_page_background">#FFFFFF</color>
+
+    <color name="color_tab_icon_solid">#F7F7F7</color>
+    <color name="color_tab_icon_stroke">#eeeeee</color>
+    <color name="color_tab_bg_icon">#5d82fd</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_tab_tip_dot_bg">#FFf14949</color>
+    <color name="color_tab_tip_text_color">#FFFFFFFF</color>
+    <!-- tab text color -->
+    <color name="color_tab_font">#b3b3b3</color>
+    <!-- tab background color -->
+    <color name="color_bg_focus">#5d82fd</color>
+    <color name="color_tab_main_bg">#FFFFFF</color>
+    <color name="color_bg_dot">#cccccc</color>
+    <color name="color_sex_bg">#8ca6f6</color>
+
+    <color name="color_background">#FAFAFA</color>
+    <color name="color_background_white">#FFFFFF</color>
+    <color name="color_search_layout">#F0F0F0</color>
+    <color name="color_search_text">#b3b3b3</color>
+
+    <!-- 所有ListView 的Item 中文本颜色设置-->
+    <color name="color_item_text_primary">#3d3d3d</color>
+    <color name="color_item_text_secondary">#b3b3b3</color>
+
+    <!-- App里面的 button 颜色 -->
+    <color name="color_btn_bg_normal">#0570a8</color>
+    <color name="color_btn_bg_press">#3a63ef</color>
+    <color name="color_btn_bg_disable">#cccccc</color>
+    <color name="color_btn_bg_delete">#FFf14949</color>
+
+    <color name="color_btn_agree">#FCBC4E</color>
+    <color name="color_btn_refuse">#5d82fd</color>
+
+    <color name="color_work_item_announce">#3fcfc4</color>
+    <color name="color_work_item_approve">#CCA6FB</color>
+    <color name="color_work_item_command">#F7C653</color>
+    <color name="color_work_item_data_funnel">#57b3f4</color>
+
+    <!-- ease mob unavailable -->
+    <color name="color_ease_mob_unavailable_view_background">#FCE1A3</color>
+
+    <color name="color_tip_info">#CFCFCF</color>
+</resources>
