@@ -1,4 +1,4 @@
-package com.stroage.cloud.model;
+package com.stroage.cloud.model.usefeed;
 
 /**
  * @date 创建时间 2018/3/18
@@ -7,7 +7,7 @@ package com.stroage.cloud.model;
  * @version
  */
 
-public class UserFeed {
+public class LoginFeed {
     private String userName;
     private String gender;
 

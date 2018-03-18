@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.stroage.cloud.view.login.LoginActivity;
+
 /**
  * 闪屏页面
  * Created by Administrator on 2018/3/17.

@@ -16,13 +16,16 @@ public class ImageDataBinding {
 
     @BindingAdapter({"bind:imageUrl", "bind:placeHolder"})
     public static void loadImage(ImageView view, String url, Drawable placeHolder) {
-        if (url != null && !url.equals(""))
+        if (url != null && !url.equals("")){
             Picasso.with(view.getContext()).load(url).placeholder(placeHolder).resize(500, 500).centerCrop().into(view);
+        }
     }
 
     @BindingAdapter({"bind:circleLibImageUrl", "bind:circleLibPlaceHolder"})
     public static void loadCircleImage(CircleImageView view, String url, Drawable placeHolder) {
-        if (url != null && !url.equals(""))
+        if (url != null && !url.equals("")){
             Picasso.with(view.getContext()).load(url).placeholder(placeHolder).resize(500, 500).centerCrop().into(view);
+        }
+
     }
 }

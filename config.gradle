@@ -37,6 +37,7 @@ ext {
     circleImageViewVersion = '2.1.0'
     databindinglibary_version = "1.3.1"
     databindingadapter_version = "1.3.1"
+    nicespinner_version = "1.3.1"
 
 
     /**
@@ -63,6 +64,7 @@ ext {
     circleImage = "de.hdodenhof:circleimageview:$circleImageViewVersion"
     databindinglibary = "com.android.databinding:library:$databindinglibary_version"
     databinndingadapter = "com.android.databinding:adapters:$databindingadapter_version"
+    nicespinner = "com.github.arcadefire:nice-spinner:$nicespinner_version"
 
 }
 
