@@ -15,4 +15,6 @@ public interface MainUsecase {
 
     Observable<DeviceInfoFeed> getDeviceInfo(String deviceType);
 
+    Observable<DeviceInfoFeed> search(String deviceName);
+
 }

@@ -9,6 +9,7 @@ android {
             storePassword '123456'
         }
     }
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.stroage.cloud"
@@ -18,6 +19,13 @@ android {
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -68,4 +76,6 @@ dependencies {
     implementation rootProject.ext.nicespinner
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation files('libs/Android_Map3D_SDK_V6.1.0_20180330.jar')
+    implementation files('libs/AMap_Search_V6.1.0_20180330.jar')
 }

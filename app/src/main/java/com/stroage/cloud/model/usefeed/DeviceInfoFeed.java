@@ -6,7 +6,7 @@ package com.stroage.cloud.model.usefeed;
  * @Description
  */
 
-public class DeviceInfoFeed {
+public class DeviceInfoFeed extends BaseFeed {
 
     private String deviceName;
     private String deviceCode;

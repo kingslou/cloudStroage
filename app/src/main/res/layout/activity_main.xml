@@ -18,11 +18,24 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/str_title_text_device_mange" />
 
-            <org.angmarch.views.NiceSpinner
-                android:id="@+id/nice_spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_margin="16dp" />
+                android:layout_height="45dp"
+                android:background="@drawable/spinner_bg"
+                android:layout_margin="20dp"
+                >
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/nice_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="1dp"
+                    android:padding="@dimen/dimen_2"
+
+                    />
+            </LinearLayout>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -35,7 +48,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_16"
+                android:layout_margin="8dp"
                 android:background="@drawable/edit_text_bg">
 
                 <EditText
@@ -63,6 +76,7 @@
 
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

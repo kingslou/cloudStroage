@@ -8,61 +8,78 @@ package com.stroage.cloud.bean;
 
 public class DeviceInfoBean {
 
-    private String deviceName;
-    private String deviceCode;
-    /***
-     * 信号
+
+    /**
+     * productid : 000001
+     * hotelname : 测试
+     * capacity :
+     * active : 1
+     * signalstate :
+     * agentname : 上海冯涛
+     * agentno : 000001
      */
-    private String signal;
-    /***
-     * 剩余燃料
-     */
-    private String residualFuel;
-    /***
-     * 设备温度
-     */
-    private String deviceTemperature;
 
+    private String productid;
+    private String hotelname;
+    private String capacity;
+    private int active;
+    private String signalstate;
+    private String agentname;
+    private String agentno;
 
-    public String getDeviceName() {
-        return deviceName;
+    public String getProductid() {
+        return productid;
     }
 
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
+    public void setProductid(String productid) {
+        this.productid = productid;
     }
 
-    public String getDeviceCode() {
-        return deviceCode;
+    public String getHotelname() {
+        return hotelname;
     }
 
-    public void setDeviceCode(String deviceCode) {
-        this.deviceCode = deviceCode;
+    public void setHotelname(String hotelname) {
+        this.hotelname = hotelname;
     }
 
-    public String getSignal() {
-        return signal;
+    public String getCapacity() {
+        return capacity;
     }
 
-    public void setSignal(String signal) {
-        this.signal = signal;
+    public void setCapacity(String capacity) {
+        this.capacity = capacity;
     }
 
-    public String getResidualFuel() {
-        return residualFuel;
+    public int getActive() {
+        return active;
     }
 
-    public void setResidualFuel(String residualFuel) {
-        this.residualFuel = residualFuel;
+    public void setActive(int active) {
+        this.active = active;
     }
 
-    public String getDeviceTemperature() {
-        return deviceTemperature;
+    public String getSignalstate() {
+        return signalstate;
     }
 
-    public void setDeviceTemperature(String deviceTemperature) {
-        this.deviceTemperature = deviceTemperature;
+    public void setSignalstate(String signalstate) {
+        this.signalstate = signalstate;
     }
 
+    public String getAgentname() {
+        return agentname;
+    }
 
+    public void setAgentname(String agentname) {
+        this.agentname = agentname;
+    }
+
+    public String getAgentno() {
+        return agentno;
+    }
+
+    public void setAgentno(String agentno) {
+        this.agentno = agentno;
+    }
 }

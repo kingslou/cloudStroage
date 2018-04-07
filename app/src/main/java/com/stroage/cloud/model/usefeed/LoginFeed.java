@@ -7,7 +7,7 @@ package com.stroage.cloud.model.usefeed;
  * @version
  */
 
-public class LoginFeed {
+public class LoginFeed extends BaseFeed {
     private String userName;
     private String gender;
 

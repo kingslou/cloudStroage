@@ -18,18 +18,16 @@ public class MainViewModel {
 
     DeviceInfoListener deviceInfoListener;
     MainUseCaseImp mainUseCaseImp;
-    private CompositeSubscription subscription;
 
     @Inject
     public MainViewModel(final DeviceInfoListener deviceInfoListener, MainUseCaseImp mainUseCaseImp){
         this.deviceInfoListener = deviceInfoListener;
         this.mainUseCaseImp = mainUseCaseImp;
-        selectDeviceType("");
     }
 
 
     public void selectDeviceType(String type){
-        subscription.add(mainUseCaseImp.getDeviceInfo("").doOnNext(new Action1<DeviceInfoFeed>() {
+        mainUseCaseImp.getDeviceInfo("").doOnNext(new Action1<DeviceInfoFeed>() {
             @Override
             public void call(DeviceInfoFeed deviceInfoFeed) {
                 deviceInfoListener.onDeviceTypeLoaded(deviceInfoFeed);
@@ -39,7 +37,7 @@ public class MainViewModel {
             public void call(Throwable throwable) {
                 deviceInfoListener.onError(throwable.getMessage());
             }
-        }).subscribe());
+        }).subscribe();
     }
     public interface DeviceInfoListener{
         void onDeviceTypeLoaded(DeviceInfoFeed deviceInfoFeed);

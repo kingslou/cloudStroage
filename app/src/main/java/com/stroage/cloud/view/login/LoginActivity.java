@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
 
     @Override
     public void onLoginClick(LoginPoJo loginPoJo) {
-        if(TextUtils.isEmpty(loginPoJo.getLoginName())||TextUtils.isEmpty(loginPoJo.getLoginPwd())){
+        if(TextUtils.isEmpty(loginPoJo.getAccount())||TextUtils.isEmpty(loginPoJo.getPassword())){
             DialogBuilder.infoDialog(getApplicationContext(),R.string.str_tip_text_warn,R.string.str_login_warn_text);
             return;
         }

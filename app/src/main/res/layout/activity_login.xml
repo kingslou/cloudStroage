@@ -57,7 +57,7 @@
                     android:layout_margin="@dimen/margin_space_5"
                     android:background="@null"
                     android:hint="@string/str_tip_text_account"
-                    android:text="@{user.loginName}"
+                    android:text="@{user.account}"
                     android:textColorHint="@color/colorWhite"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimen_label_text" />
@@ -88,7 +88,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="@string/str_tip_text_pwd"
-                    android:text="@{user.loginPwd}"
+                    android:text="@{user.password}"
                     android:inputType="textPassword"
                     android:textColor="@color/colorWhite"
                     android:textColorHint="@color/colorWhite"

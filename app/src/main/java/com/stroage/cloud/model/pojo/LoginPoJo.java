@@ -8,27 +8,27 @@ package com.stroage.cloud.model.pojo;
  */
 public class LoginPoJo {
 
-    private String loginName;
-    private String loginPwd;
+    private String account;
+    private String password;
 
     public LoginPoJo(String loginName, String loginPwd) {
-        this.loginName = loginName;
-        this.loginPwd = loginPwd;
+        this.account = loginName;
+        this.password = loginPwd;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getAccount() {
+        return account;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getLoginPwd() {
-        return loginPwd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

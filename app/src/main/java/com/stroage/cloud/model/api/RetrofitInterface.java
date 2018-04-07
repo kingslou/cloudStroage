@@ -29,6 +29,8 @@ public interface RetrofitInterface {
     @POST
     Observable<LoginFeed> login(@Body LoginPoJo loginPoJo);
 
+
+
     @GET("tags/search")
     Observable<DeviceInfoFeed> searchTag(@Query("q") String query,
                                             @Query("access_token") String token);

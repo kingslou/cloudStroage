@@ -28,4 +28,9 @@ public class MainUseCaseImp implements MainUsecase {
     public Observable<DeviceInfoFeed> getDeviceInfo(String deviceType) {
         return apiSource.getDeviceInfo(deviceType).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Observable<DeviceInfoFeed> search(String deviceName) {
+        return null;
+    }
 }
