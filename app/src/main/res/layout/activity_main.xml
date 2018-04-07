@@ -22,7 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@drawable/spinner_bg"
-                android:layout_margin="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
                 >
                 <org.angmarch.views.NiceSpinner
                     android:id="@+id/nice_spinner"
