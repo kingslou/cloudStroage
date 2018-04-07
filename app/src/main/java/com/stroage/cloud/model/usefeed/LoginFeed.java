@@ -1,5 +1,7 @@
 package com.stroage.cloud.model.usefeed;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @date 创建时间 2018/3/18
  * @author Administrator
@@ -8,22 +10,22 @@ package com.stroage.cloud.model.usefeed;
  */
 
 public class LoginFeed extends BaseFeed {
-    private String userName;
-    private String gender;
 
-    public String getUserName() {
-        return userName;
+    @SerializedName("data")
+    private UserFeed userFeed;
+
+    public void setUserFeed(UserFeed userFeed) {
+        this.userFeed = userFeed;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public UserFeed getUserFeed() {
+        return userFeed;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
+    @Override
+    public String toString() {
+        return "LoginFeed{" +
+                "userFeed=" + userFeed +
+                '}';
     }
 }
