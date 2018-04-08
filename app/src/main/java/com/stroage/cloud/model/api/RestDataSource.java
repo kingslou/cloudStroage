@@ -2,7 +2,12 @@ package com.stroage.cloud.model.api;
 
 import android.util.Log;
 
+import com.stroage.cloud.model.pojo.AgentPoJo;
 import com.stroage.cloud.model.pojo.LoginPoJo;
+import com.stroage.cloud.model.pojo.QueryAgentPoJo;
+import com.stroage.cloud.model.pojo.QueryDevicePoJo;
+import com.stroage.cloud.model.usefeed.AgentFeed;
+import com.stroage.cloud.model.usefeed.AgentListFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
 
 import java.io.IOException;
@@ -28,22 +33,6 @@ import rx.schedulers.Schedulers;
  */
 
 public class RestDataSource {
-    // basic API 签名认证
-    public static String API_QUERY_PARAMETER_APP_ID = "appid";
-    public static String API_QUERY_PARAMETER_APP_SECRET = "app_secret";
-
-
-    public static String API_QUERY_PARAMETER_DEVICE_NO = "device_no";
-    public static String API_QUERY_PARAMETER_ORG_ID = "org_id";
-    public static String API_QUERY_PARAMETER_OS = "os";
-
-    public static String API_QUERY_PARAMETER_TIMESTAMP = "t";
-
-    public static String API_QUERY_PARAMETER_USER_ID = "user_id";
-
-    public static String API_QUERY_PARAMETER_SIGNATURE = "signature";
-
-    public static String API_QUERY_PARAMETER_ACCESS_TOKEN = "token";
 
     private static RetrofitInterface instance;
 
@@ -83,6 +72,18 @@ public class RestDataSource {
     public static void login(LoginPoJo pj, Observer<LoginFeed> observer) {
         setSubscribe(getAPIService().login(pj), observer);
     }
+
+    public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<AgentListFeed> observer){
+        setSubscribe(getAPIService().getAgentListByName(queryAgentPoJo),observer);
+    }
+
+    public static void getAgentList(AgentPoJo agentPoJo, Observer<AgentListFeed> observer){
+        setSubscribe(getAPIService().getAgentList(agentPoJo),observer);
+    }
+
+
+
+
 
     /**
      * 插入观察者

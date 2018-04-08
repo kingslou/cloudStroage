@@ -12,20 +12,37 @@ import com.stroage.cloud.R;
 
 public class DialogBuilder {
 
-    public static MaterialDialog.Builder progressDialog(Context context, int title, int content) {
-        return new MaterialDialog.Builder(context)
+    public static MaterialDialog materialDialog;
+
+    public static void progressDialog(Context context, int title, int content) {
+         if(materialDialog!=null && materialDialog.isShowing()){
+             materialDialog.dismiss();
+             materialDialog = null;
+         }
+         materialDialog = new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
                 .canceledOnTouchOutside(false)
-                .progress(true, 0);
+                .progress(true, 0).show();
     }
 
-    public static MaterialDialog.Builder infoDialog(Context context, int title, int content) {
-        return new MaterialDialog.Builder(context)
+    public static void infoDialog(Context context, int title, int content) {
+        if(materialDialog!=null && materialDialog.isShowing()){
+            materialDialog.dismiss();
+            materialDialog = null;
+        }
+        materialDialog = new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
                 .positiveText(R.string.dialog_action_ok)
-                .positiveColorRes(R.color.colorPrimary);
+                .positiveColorRes(R.color.colorPrimary).show();
+    }
+
+    public static void hideDialog(){
+        if(materialDialog!=null && materialDialog.isShowing()){
+            materialDialog.dismiss();
+            materialDialog = null;
+        }
     }
 
 }
