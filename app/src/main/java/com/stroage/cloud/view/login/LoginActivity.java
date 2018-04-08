@@ -7,67 +7,91 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.stroage.cloud.AppConfig;
 import com.stroage.cloud.R;
 import com.stroage.cloud.StorageCloudApp;
 import com.stroage.cloud.databinding.ActivityLoginBinding;
-import com.stroage.cloud.di.login.DaggerLoginComponent;
-import com.stroage.cloud.di.login.LoginModule;
+import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.LoginPoJo;
+import com.stroage.cloud.model.usefeed.LoginFeed;
 import com.stroage.cloud.utils.DialogBuilder;
+import com.stroage.cloud.utils.SPUtil;
 import com.stroage.cloud.view.main.MainActivity;
 import com.stroage.cloud.viewmodel.login.LoginViewModel;
 
-import javax.inject.Inject;
+import butterknife.BindView;
+import rx.Subscriber;
 
 /**
- * @date 创建时间 2018/3/18
  * @author Administrator
+ * @date 创建时间 2018/3/18
  * @Description
- * @version
  */
 public class LoginActivity extends AppCompatActivity implements LoginViewModel.MainListener {
 
     ActivityLoginBinding activityLoginBinding;
-    @Inject
+
     LoginViewModel loginViewModel;
+    @BindView(R.id.edit_phone)
+    EditText editPhone;
+    @BindView(R.id.edit_pwd)
+    EditText editPwd;
     private int status = 0;
+    private boolean isCheckAccount = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityLoginBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
-        initInject();
-        LoginPoJo loginPoJo = new LoginPoJo("111","222");
-        activityLoginBinding.setUser(loginPoJo);
+        activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        loginViewModel = new LoginViewModel(this);
         activityLoginBinding.setClickLogin(loginViewModel);
-        loginViewModel.setCheckPwd(false);
+        isCheckAccount = SPUtil.getBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT);
+        loginViewModel.setCheckPwd(isCheckAccount);
 
-    }
-
-    void initInject(){
-        DaggerLoginComponent.builder().appComponent(((StorageCloudApp)getApplication()).getAppComponent())
-                .loginModule(new LoginModule(this)).build().inject(this);
     }
 
     @Override
     public void onLoginClick(LoginPoJo loginPoJo) {
-        if(TextUtils.isEmpty(loginPoJo.getAccount())||TextUtils.isEmpty(loginPoJo.getPassword())){
-            DialogBuilder.infoDialog(getApplicationContext(),R.string.str_tip_text_warn,R.string.str_login_warn_text);
+        LoginPoJo loginPoJo1 = new LoginPoJo("admin", "bazong888");
+        if (TextUtils.isEmpty(loginPoJo1.getAccount()) || TextUtils.isEmpty(loginPoJo1.getPassword())) {
+            DialogBuilder.infoDialog(getApplicationContext(), R.string.str_tip_text_warn, R.string.str_login_warn_text);
             return;
         }
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        RestDataSource.login(loginPoJo1, new Subscriber<LoginFeed>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(LoginFeed loginFeed) {
+                //保存登录信息
+                SPUtil.setStringContentPreferences(StorageCloudApp.getContext(), AppConfig.CACHEUSER,new Gson().toJson(loginFeed));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+
     }
 
     @Override
     public void onCheckPwdClick(View view) {
         CheckBox radioButton = (CheckBox) view;
-        if(radioButton.isChecked()){
+        if (radioButton.isChecked()) {
             loginViewModel.setCheckPwd(false);
-        }else{
+            isCheckAccount = false;
+        } else {
             loginViewModel.setCheckPwd(true);
+            isCheckAccount = true;
         }
+        SPUtil.setBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT,isCheckAccount);
     }
 
     @Override

@@ -9,29 +9,21 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.amap.api.maps.MapView;
 import com.stroage.cloud.R;
-import com.stroage.cloud.StorageCloudApp;
 import com.stroage.cloud.adapter.BaseViewHolder;
 import com.stroage.cloud.adapter.OnItemClickListener;
 import com.stroage.cloud.bean.DeviceInfoBean;
 import com.stroage.cloud.bean.SpinnerListBean;
-import com.stroage.cloud.di.main.DaggerMainComponent;
-import com.stroage.cloud.di.main.MainModule;
-import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
+import com.stroage.cloud.model.usefeed.AgentFeed;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
-import com.stroage.cloud.viewmodel.main.MainViewModel;
+import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
 
 import org.angmarch.views.NiceSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * @date 创建时间 2018/3/18
@@ -40,7 +32,7 @@ import javax.inject.Inject;
  * @version
  */
 
-public class MainActivity extends AppCompatActivity implements MainViewModel.DeviceInfoListener {
+public class MainActivity extends AppCompatActivity implements LoadAgentViewModel.AgentListener {
 
 
     NiceSpinner niceSpinner;
@@ -48,14 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Dev
     private com.stroage.cloud.adapter.BaseAdapter baseAdapter;
     private List<DeviceInfoBean> deviceInfoBeanList = new ArrayList<>();
 
-    @Inject
-    MainViewModel mainViewModel;
+    LoadAgentViewModel loadAgentViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initInject();
         niceSpinner = (NiceSpinner) findViewById(R.id.nice_spinner);
         mRecycleView = (RecyclerView)findViewById(R.id.recycleView);
         initAgent();
@@ -142,9 +132,7 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Dev
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String deviceType = listBeans.get(i);
-                mainViewModel.selectDeviceType(deviceType);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -152,18 +140,14 @@ public class MainActivity extends AppCompatActivity implements MainViewModel.Dev
         });
     }
 
-    void initInject(){
-        DaggerMainComponent.builder().appComponent(((StorageCloudApp)getApplication()).getAppComponent())
-                .mainModule(new MainModule(this)).build().inject(this);
-    }
 
     @Override
-    public void onDeviceTypeLoaded(DeviceInfoFeed deviceInfoFeed) {
+    public void onLoaded(AgentFeed agentFeed) {
 
     }
 
     @Override
-    public void onError(String errorMsg) {
+    public void onError(Throwable error) {
 
     }
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     signingConfigs {
         config {
@@ -74,8 +73,11 @@ dependencies {
     implementation rootProject.ext.parcelerApi
     annotationProcessor rootProject.ext.parceler
     implementation rootProject.ext.nicespinner
+    implementation rootProject.ext.gsonlibary
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation files('libs/Android_Map3D_SDK_V6.1.0_20180330.jar')
     implementation files('libs/AMap_Search_V6.1.0_20180330.jar')
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
