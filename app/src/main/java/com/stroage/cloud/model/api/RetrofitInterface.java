@@ -1,22 +1,20 @@
 package com.stroage.cloud.model.api;
 
 import com.stroage.cloud.model.pojo.AgentPoJo;
-import com.stroage.cloud.model.pojo.DevicePoJo;
+import com.stroage.cloud.model.pojo.FindByProductIdPoJo;
 import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.pojo.QueryAgentPoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
+import com.stroage.cloud.model.pojo.UpdateLockPoJo;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
+import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
-import com.stroage.cloud.view.login.LoginActivity;
-
-import java.util.List;
+import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -40,14 +38,17 @@ public interface RetrofitInterface {
     Observable<AgentListFeed> getAgentList(@Body AgentPoJo agentPoJo);
 
     @Headers("Content-Type:application/json")
-    @POST("burnermanager/customer/findbyagent")
-    Observable<AgentListFeed> findbyagent(@Body QueryDevicePoJo queryDevicePoJo);
+    @POST("burnermanager/customer/findbyAgent")
+    Observable<DeviceListInfoFeed> findbyAgent(@Body QueryDevicePoJo queryDevicePoJo);
+
+    @Headers("Content-Type:application/json")
+    @POST("burnermanager/customer/updatelockcmd")
+    Observable<UpdateLockFeed> updateLockcmd(@Body UpdateLockPoJo updateLockPoJo);
+
+    @Headers("Content-Type:application/json")
+    @POST("burnermanager/customer/findbyproductid")
+    Observable<DeviceInfoFeed> findbyproductid(@Body FindByProductIdPoJo findByProductIdPoJo);
 
 
-
-
-    @GET("tags/search")
-    Observable<DeviceInfoFeed> searchTag(@Query("q") String query,
-                                            @Query("access_token") String token);
 
 }

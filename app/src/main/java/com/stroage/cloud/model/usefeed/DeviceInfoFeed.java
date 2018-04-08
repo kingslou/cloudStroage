@@ -1,66 +1,22 @@
 package com.stroage.cloud.model.usefeed;
 
+import com.stroage.cloud.bean.DeviceInfoBean;
+
 /**
  * @author Administrator
- * @date 创建时间 2018/3/18
+ * @date 创建时间 2018/4/9
  * @Description
  */
 
 public class DeviceInfoFeed extends BaseFeed {
 
-    private String deviceName;
-    private String deviceCode;
-    /***
-     * 信号
-     */
-    private String signal;
-    /***
-     * 剩余燃料
-     */
-    private String residualFuel;
-    /***
-     * 设备温度
-     */
-    private String deviceTemperature;
+    private DeviceInfoBean data;
 
-
-    public String getDeviceName() {
-        return deviceName;
+    public void setData(DeviceInfoBean data) {
+        this.data = data;
     }
 
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
-    }
-
-    public String getDeviceCode() {
-        return deviceCode;
-    }
-
-    public void setDeviceCode(String deviceCode) {
-        this.deviceCode = deviceCode;
-    }
-
-    public String getSignal() {
-        return signal;
-    }
-
-    public void setSignal(String signal) {
-        this.signal = signal;
-    }
-
-    public String getResidualFuel() {
-        return residualFuel;
-    }
-
-    public void setResidualFuel(String residualFuel) {
-        this.residualFuel = residualFuel;
-    }
-
-    public String getDeviceTemperature() {
-        return deviceTemperature;
-    }
-
-    public void setDeviceTemperature(String deviceTemperature) {
-        this.deviceTemperature = deviceTemperature;
+    public DeviceInfoBean getData() {
+        return data;
     }
 }

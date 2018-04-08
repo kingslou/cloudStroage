@@ -1,23 +1,18 @@
 package com.stroage.cloud.model.api;
 
-import android.util.Log;
-
 import com.stroage.cloud.model.pojo.AgentPoJo;
+import com.stroage.cloud.model.pojo.FindByProductIdPoJo;
 import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.pojo.QueryAgentPoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
-import com.stroage.cloud.model.usefeed.AgentFeed;
+import com.stroage.cloud.model.pojo.UpdateLockPoJo;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
+import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
+import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
+import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
-import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -69,20 +64,61 @@ public class RestDataSource {
         return instance;
     }
 
+    /***
+     * 登录
+     * @param pj
+     * @param observer
+     */
     public static void login(LoginPoJo pj, Observer<LoginFeed> observer) {
         setSubscribe(getAPIService().login(pj), observer);
     }
 
+    /***
+     * 根据供应商名字获取供应商列表
+     * @param queryAgentPoJo
+     * @param observer
+     */
     public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<AgentListFeed> observer){
         setSubscribe(getAPIService().getAgentListByName(queryAgentPoJo),observer);
     }
 
+    /***
+     * 获取供应商列表
+     * @param agentPoJo
+     * @param observer
+     */
     public static void getAgentList(AgentPoJo agentPoJo, Observer<AgentListFeed> observer){
         setSubscribe(getAPIService().getAgentList(agentPoJo),observer);
     }
 
+    /***
+     * 列出某个供应商下面的设备列表
+     * @param poJo
+     * @param observer
+     */
+    public static void findDevicebyAgent(QueryDevicePoJo poJo, Observer<DeviceListInfoFeed> observer){
+        setSubscribe(getAPIService().findbyAgent(poJo),observer);
+    }
 
+    /***
+     * 开锁 或者关闭
+     * @param poJo
+     * @param observer
+     */
+    public static void updateLockCMD(UpdateLockPoJo poJo, Observer<UpdateLockFeed> observer){
+        setSubscribe(getAPIService().updateLockcmd(poJo),observer);
+    }
 
+    /***
+     * 根据设备编号 获取设备信息
+     * @param poJo
+     * @param observer
+     */
+    public static void findbyproductid(FindByProductIdPoJo poJo, Observer<DeviceInfoFeed> observer){
+        setSubscribe(getAPIService().findbyproductid(poJo),observer);
+    }
+
+    
 
 
     /**
