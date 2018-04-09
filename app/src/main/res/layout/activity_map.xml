@@ -49,6 +49,36 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linner_open"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linner_bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_open_youfa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#0298e0"
+            android:text="打开油阀"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/btn_close_youfa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#998ae2fb"
+            android:text="关闭油阀"
+            android:textColor="@color/colorWhite"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/linner_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

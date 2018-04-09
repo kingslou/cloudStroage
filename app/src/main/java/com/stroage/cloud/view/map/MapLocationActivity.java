@@ -1,12 +1,15 @@
 package com.stroage.cloud.view.map;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -14,29 +17,25 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeResult;
-import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeQuery;
-import com.amap.api.services.geocoder.RegeocodeResult;
 import com.stroage.cloud.R;
-import com.stroage.cloud.view.main.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Administrator
@@ -46,6 +45,18 @@ import java.util.Date;
 
 public class MapLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
 
+    @BindView(R.id.image_back)
+    ImageView imageBack;
+    @BindView(R.id.btn_open_youfa)
+    Button btnOpenYoufa;
+    @BindView(R.id.btn_close_youfa)
+    Button btnCloseYoufa;
+    @BindView(R.id.linner_open)
+    LinearLayout linnerOpen;
+    @BindView(R.id.btn_open_lock)
+    Button btnOpenLock;
+    @BindView(R.id.btn_maintain)
+    Button btnMaintain;
     private MapView mMapView;
     private MyLocationStyle myLocationStyle;
     private AMap aMap;
@@ -65,9 +76,10 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        mMapView = (MapView)findViewById(R.id.mapview);
+        ButterKnife.bind(this);
+        mMapView = (MapView) findViewById(R.id.mapview);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
-        if(aMap==null){
+        if (aMap == null) {
             aMap = mMapView.getMap();
         }
 
@@ -181,7 +193,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         //位置
         options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
         StringBuffer buffer = new StringBuffer();
-        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() +  "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
         //标题
         options.title(buffer.toString());
         //子标题
@@ -196,7 +208,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
      * 添加一个从地上生长的Marker
      */
     public void addGrowMarker() {
-        if(growMarker == null) {
+        if (growMarker == null) {
             MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                     .position(latlng);
@@ -210,8 +222,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
      * 地上生长的Marker
      */
     private void startGrowAnimation() {
-        if(growMarker != null) {
-            Animation animation = new ScaleAnimation(0,1,0,1);
+        if (growMarker != null) {
+            Animation animation = new ScaleAnimation(0, 1, 0, 1);
             animation.setInterpolator(new LinearInterpolator());
             //整个移动所需要的时间
             animation.setDuration(1000);
@@ -256,5 +268,29 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         mMapView.onDestroy();
         mLocationClient.stopLocation();//停止定位
         mLocationClient.onDestroy();//销毁定位客户端。
+    }
+
+    @OnClick({R.id.image_back, R.id.btn_open_youfa, R.id.btn_close_youfa, R.id.linner_open, R.id.btn_open_lock, R.id.btn_maintain})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.image_back:
+                finish();
+                break;
+            case R.id.btn_open_youfa:
+                break;
+            case R.id.btn_close_youfa:
+                break;
+            case R.id.linner_open:
+                break;
+            case R.id.btn_open_lock:
+                break;
+            case R.id.btn_maintain:
+                if(linnerOpen.getVisibility()==View.VISIBLE){
+                    linnerOpen.setVisibility(View.GONE);
+                }else{
+                    linnerOpen.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
     }
 }

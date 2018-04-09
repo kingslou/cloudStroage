@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.stroage.cloud.R;
 import com.stroage.cloud.adapter.BaseViewHolder;
 import com.stroage.cloud.adapter.OnItemClickListener;
@@ -19,6 +22,7 @@ import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.AgentPoJo;
 import com.stroage.cloud.model.usefeed.AgentFeed;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
+import com.stroage.cloud.utils.DialogBuilder;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
 import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     private List<DeviceInfoBean> deviceInfoBeanList = new ArrayList<>();
     LoadAgentViewModel loadAgentViewModel;
     private List<AgentFeed> agentFeedList = new ArrayList<>();
+    private long mExitTime;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +65,12 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         for(int i=0;i<20;i++){
             DeviceInfoBean deviceInfoBean = new DeviceInfoBean();
             deviceInfoBean.setActive(100);
-            deviceInfoBean.setAgentname("ceshi");
-            deviceInfoBean.setHotelname("酒店1");
-            deviceInfoBean.setSignalstate("ddd");
-            deviceInfoBean.setProductid("20081100");
+            deviceInfoBean.setAgentname("代理商"+i);
+            deviceInfoBean.setHotelname("酒店"+i);
+            deviceInfoBean.setSignalstate("强");
+            deviceInfoBean.setProductid("201804000"+i);
             deviceInfoBean.setAgentno("sdhashd");
-            deviceInfoBean.setCapacity("hajaj");
+            deviceInfoBean.setCapacity((i+1)+"");
             deviceInfoBeanList.add(deviceInfoBean);
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this );
@@ -91,7 +96,14 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                 DeviceInfoBean deviceInfoBean = deviceInfoBeanList.get(position);
                 text_capacity.setText(deviceInfoBean.getCapacity());
                 text_device_code.setText(deviceInfoBean.getProductid());
-                text_device_wd.setText(deviceInfoBean.getActive()+"");
+                if(position%2==0){
+                    text_device_wd.setText("正常");
+                    text_device_wd.setTextColor(getResources().getColor(R.color.color_heading_black));
+                }else{
+                    text_device_wd.setTextColor(getResources().getColor(R.color.color_tab_tip_dot_bg));
+                    text_device_wd.setText("异常");
+                }
+
                 text_signal_state.setText(deviceInfoBean.getSignalstate());
                 text_hotel_name.setText(deviceInfoBean.getHotelname());
 
@@ -111,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         mRecycleView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                outRect.bottom = DisplayUtils.dip2px(10);
+                outRect.bottom = DisplayUtils.dip2px(5);
             }
         });
         baseAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -122,42 +134,55 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                 startActivity(intent);
             }
         });
-
     }
 
     void initAgent(){
         final List<String> listBeans = new ArrayList<>();
-        RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
+        for(int i=0;i<6;i++){
+            listBeans.add("代理商"+i);
+        }
+        niceSpinner.attachDataSource(listBeans);
+        niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCompleted() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String deviceType = listBeans.get(i);
             }
             @Override
-            public void onError(Throwable e) {
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            @Override
-            public void onNext(AgentListFeed agentListFeed) {
-                if(agentListFeed.getStatus().equals("failed")){
-                    return ;
-                }
-                agentFeedList = agentListFeed.getPageList().getRows();
-                for(AgentFeed agentFeed : agentFeedList){
-                    SpinnerListBean spinnerListBean = new SpinnerListBean(agentFeed.getName(),agentFeed.getId()+"");
-                    listBeans.add(spinnerListBean.getAgentName());
-                }
-                niceSpinner.attachDataSource(listBeans);
-                niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        String deviceType = listBeans.get(i);
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
             }
         });
+//        RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
+//            @Override
+//            public void onCompleted() {
+//            }
+//            @Override
+//            public void onError(Throwable e) {
+//            }
+//
+//            @Override
+//            public void onNext(AgentListFeed agentListFeed) {
+//                if(agentListFeed.getStatus().equals("failed")){
+//                    return ;
+//                }
+//                agentFeedList = agentListFeed.getPageList().getRows();
+//                for(AgentFeed agentFeed : agentFeedList){
+//                    SpinnerListBean spinnerListBean = new SpinnerListBean(agentFeed.getName(),agentFeed.getId()+"");
+//                    listBeans.add(spinnerListBean.getAgentName());
+//                }
+//                niceSpinner.attachDataSource(listBeans);
+//                niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                        String deviceType = listBeans.get(i);
+//                    }
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                    }
+//                });
+//            }
+//        });
     }
 
 
@@ -169,5 +194,24 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     @Override
     public void onError(Throwable error) {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //判断用户是否点击了“返回键”
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //与上次点击返回键时刻作差
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+                //大于2000ms则认为是误操作，使用Toast进行提示
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                //并记录下本次点击“返回键”的时刻，以便下次进行判断
+                mExitTime = System.currentTimeMillis();
+            } else {
+                //小于2000ms则认为是用户确实希望退出程序-调用System.exit()方法进行退出
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

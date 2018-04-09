@@ -3,6 +3,7 @@ package com.stroage.cloud.view.login;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,27 +76,43 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
         }
         loginPoJo = new LoginPoJo(editPhone.getText().toString(),editPhone.getText().toString());
         DialogBuilder.progressDialog(LoginActivity.this,R.string.str_loading,R.string.str_empty);
-        RestDataSource.login(loginPoJo, new Subscriber<LoginFeed>() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onCompleted() {
-            }
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogBuilder.hideDialog();
+                        SPUtil.setBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT,isCheckAccount);
+                        Log.e("保存的状态",isCheckAccount+"");
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }
+                });
 
-            @Override
-            public void onError(Throwable e) {
-                DialogBuilder.hideDialog();
             }
-
-            @Override
-            public void onNext(LoginFeed loginFeed) {
-                //保存登录信息
-                DialogBuilder.hideDialog();
-                SPUtil.setBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT,isCheckAccount);
-                Log.e("保存的状态",isCheckAccount+"");
-                SPUtil.setStringContentPreferences(StorageCloudApp.getContext(), AppConfig.CACHEUSER,new Gson().toJson(loginFeed));
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            }
-        });
+        },500);
+//        RestDataSource.login(loginPoJo, new Subscriber<LoginFeed>() {
+//            @Override
+//            public void onCompleted() {
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                DialogBuilder.hideDialog();
+//            }
+//
+//            @Override
+//            public void onNext(LoginFeed loginFeed) {
+//                //保存登录信息
+//                DialogBuilder.hideDialog();
+//                SPUtil.setBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT,isCheckAccount);
+//                Log.e("保存的状态",isCheckAccount+"");
+//                SPUtil.setStringContentPreferences(StorageCloudApp.getContext(), AppConfig.CACHEUSER,new Gson().toJson(loginFeed));
+//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                finish();
+//            }
+//        });
     }
 
     @Override

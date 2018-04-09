@@ -1,7 +1,9 @@
 package com.stroage.cloud.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.stroage.cloud.R;
 
@@ -22,7 +24,7 @@ public class DialogBuilder {
          materialDialog = new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
-                .canceledOnTouchOutside(false)
+                .canceledOnTouchOutside(false).progressIndeterminateStyle(true)
                 .progress(true, 0).show();
     }
 
@@ -35,6 +37,12 @@ public class DialogBuilder {
                 .title(title)
                 .content(content)
                 .positiveText(R.string.dialog_action_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
                 .positiveColorRes(R.color.colorPrimary).show();
     }
 
