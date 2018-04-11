@@ -152,37 +152,37 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
 
             }
         });
-//        RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
-//            @Override
-//            public void onCompleted() {
-//            }
-//            @Override
-//            public void onError(Throwable e) {
-//            }
-//
-//            @Override
-//            public void onNext(AgentListFeed agentListFeed) {
-//                if(agentListFeed.getStatus().equals("failed")){
-//                    return ;
-//                }
-//                agentFeedList = agentListFeed.getPageList().getRows();
-//                for(AgentFeed agentFeed : agentFeedList){
-//                    SpinnerListBean spinnerListBean = new SpinnerListBean(agentFeed.getName(),agentFeed.getId()+"");
-//                    listBeans.add(spinnerListBean.getAgentName());
-//                }
-//                niceSpinner.attachDataSource(listBeans);
-//                niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                        String deviceType = listBeans.get(i);
-//                    }
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                    }
-//                });
-//            }
-//        });
+        RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
+            @Override
+            public void onCompleted() {
+            }
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(AgentListFeed agentListFeed) {
+                if(agentListFeed.getStatus().equals("failed")){
+                    return ;
+                }
+                agentFeedList = agentListFeed.getPageList().getRows();
+                for(AgentFeed agentFeed : agentFeedList){
+                    SpinnerListBean spinnerListBean = new SpinnerListBean(agentFeed.getName(),agentFeed.getId()+"");
+                    listBeans.add(spinnerListBean.getAgentName());
+                }
+                niceSpinner.attachDataSource(listBeans);
+                niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String deviceType = listBeans.get(i);
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+        });
     }
 
 

@@ -6,6 +6,7 @@ import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.pojo.QueryAgentPoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
 import com.stroage.cloud.model.pojo.UpdateLockPoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchStatusPoJo;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
@@ -117,6 +118,8 @@ public class RestDataSource {
     public static void findbyproductid(FindByProductIdPoJo poJo, Observer<DeviceInfoFeed> observer){
         setSubscribe(getAPIService().findbyproductid(poJo),observer);
     }
+
+
 
 
 

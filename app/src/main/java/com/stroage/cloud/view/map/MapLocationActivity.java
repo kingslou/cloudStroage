@@ -29,6 +29,10 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.stroage.cloud.R;
+import com.stroage.cloud.model.api.RestDataSource;
+import com.stroage.cloud.model.pojo.UpdateLockPoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchStatusPoJo;
+import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +40,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observer;
 
 /**
  * @author Administrator
@@ -283,6 +288,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
             case R.id.linner_open:
                 break;
             case R.id.btn_open_lock:
+
                 break;
             case R.id.btn_maintain:
                 if(linnerOpen.getVisibility()==View.VISIBLE){
@@ -293,4 +299,31 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 break;
         }
     }
+
+    /***
+     * 开锁网络请求方法
+     * @param productId
+     * @param cmd
+     */
+    private void openLockTask(String productId,int cmd){
+        UpdateLockPoJo updateLockPoJo = new UpdateLockPoJo(productId,cmd);
+        RestDataSource.updateLockCMD(updateLockPoJo, new Observer<UpdateLockFeed>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(UpdateLockFeed updateLockFeed) {
+
+            }
+        });
+
+    }
+
 }
