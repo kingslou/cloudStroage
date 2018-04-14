@@ -2,16 +2,15 @@ package com.stroage.cloud.model.pojo;
 
 /**
  * @author Administrator
- * @date 创建时间 2018/4/12
+ * @date 创建时间 2018/4/15
  * @Description
  */
 
-public class UpdateSwitchStatusPoJo {
+public class UpdateSwitchClosePoJo {
 
-
-    public UpdateSwitchStatusPoJo(String productid, int switchcmdon) {
+    public UpdateSwitchClosePoJo(String productid, int switchcmdon) {
         this.productid = productid;
-        this.switchcmdon = switchcmdon;
+        this.switchcmdoff = switchcmdon;
     }
 
     /**
@@ -22,7 +21,7 @@ public class UpdateSwitchStatusPoJo {
 
 
     private String productid;
-    private int switchcmdon;
+    private int switchcmdoff;
 
     public String getProductid() {
         return productid;
@@ -33,12 +32,10 @@ public class UpdateSwitchStatusPoJo {
     }
 
     public int getSwitchcmdon() {
-        return switchcmdon;
+        return switchcmdoff;
     }
 
     public void setSwitchcmdon(int switchcmdon) {
-        this.switchcmdon = switchcmdon;
+        this.switchcmdoff = switchcmdon;
     }
-
-
 }

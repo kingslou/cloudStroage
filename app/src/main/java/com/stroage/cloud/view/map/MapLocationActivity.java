@@ -31,7 +31,6 @@ import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.stroage.cloud.R;
 import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.UpdateLockPoJo;
-import com.stroage.cloud.model.pojo.UpdateSwitchStatusPoJo;
 import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
 import java.text.SimpleDateFormat;

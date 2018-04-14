@@ -7,8 +7,10 @@ import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.pojo.QueryAgentPoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
 import com.stroage.cloud.model.pojo.UpdateLockPoJo;
-import com.stroage.cloud.model.pojo.UpdateSwitchStatusPoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchClosePoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchOpenPoJo;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
+import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
@@ -57,15 +59,20 @@ public interface RetrofitInterface {
     @POST("burnermanager/customer/findbyproductid")
     Observable<DeviceInfoFeed> findbyproductid(@Body FindByProductIdPoJo findByProductIdPoJo);
 
-    //7修改设备开关状态
+    //7修改设备开状态
     @Headers("Content-Type:application/json")
     @POST("burnermanager/customer/updateSwitchStatus")
-    Observable<DeviceInfoFeed> updateSwitchStatus(@Body UpdateSwitchStatusPoJo updateSwitchStatusPoJo);
+    Observable<BaseFeed> updateSwitchOpenStatus(@Body UpdateSwitchOpenPoJo updateSwitchStatusPoJo);
+
+    //修改设备关油阀状态
+    @Headers("Content-Type:application/json")
+    @POST("burnermanager/customer/updateSwitchStatus")
+    Observable<BaseFeed> updateSwitchCloseStatus(@Body UpdateSwitchClosePoJo updateSwitchStatusPoJo);
 
     //8设备的无筛选列表
     @Headers("Content-Type:application/json")
     @POST("burnermanager/customer/findlist")
-    Observable<DeviceInfoFeed> findAllDeviceList(@Body GetAllDevicePoJo getAllDevicePoJo);
+    Observable<DeviceListInfoFeed> findAllDeviceList(@Body GetAllDevicePoJo getAllDevicePoJo);
 
 
 

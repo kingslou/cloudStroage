@@ -2,12 +2,15 @@ package com.stroage.cloud.model.api;
 
 import com.stroage.cloud.model.pojo.AgentPoJo;
 import com.stroage.cloud.model.pojo.FindByProductIdPoJo;
+import com.stroage.cloud.model.pojo.GetAllDevicePoJo;
 import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.pojo.QueryAgentPoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
 import com.stroage.cloud.model.pojo.UpdateLockPoJo;
-import com.stroage.cloud.model.pojo.UpdateSwitchStatusPoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchClosePoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchOpenPoJo;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
+import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
@@ -119,9 +122,22 @@ public class RestDataSource {
         setSubscribe(getAPIService().findbyproductid(poJo),observer);
     }
 
+    /***
+     * 无筛选状态的所有设备列表
+     * @param pojo
+     * @param observer
+     */
+    public static void findAllDeviceList(GetAllDevicePoJo pojo,Observer<DeviceListInfoFeed> observer){
+        setSubscribe(getAPIService().findAllDeviceList(pojo),observer);
+    }
 
+    public static void updateSwitchOpenStatus(UpdateSwitchOpenPoJo pojo, Observer<BaseFeed> observer){
+        setSubscribe(getAPIService().updateSwitchOpenStatus(pojo),observer);
+    }
 
-
+    public static void updateSwitchCloseStatus(UpdateSwitchClosePoJo pojo,Observer<BaseFeed> observer){
+        setSubscribe(getAPIService().updateSwitchCloseStatus(pojo),observer);
+    }
 
 
     /**
