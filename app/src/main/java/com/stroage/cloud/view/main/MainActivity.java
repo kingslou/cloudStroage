@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,13 +17,14 @@ import android.widget.Toast;
 import com.stroage.cloud.R;
 import com.stroage.cloud.adapter.BaseViewHolder;
 import com.stroage.cloud.adapter.OnItemClickListener;
+import com.stroage.cloud.adapter.StrogeBaseAdapter;
 import com.stroage.cloud.bean.DeviceInfoBean;
-import com.stroage.cloud.bean.SpinnerListBean;
 import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.AgentPoJo;
+import com.stroage.cloud.model.pojo.QueryDevicePoJo;
 import com.stroage.cloud.model.usefeed.AgentFeed;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
-import com.stroage.cloud.utils.DialogBuilder;
+import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
 import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
@@ -30,6 +32,7 @@ import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
 import org.angmarch.views.NiceSpinner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import rx.Observer;
@@ -46,11 +49,12 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
 
     NiceSpinner niceSpinner;
     private RecyclerView mRecycleView;
-    private com.stroage.cloud.adapter.BaseAdapter baseAdapter;
+    private StrogeBaseAdapter baseAdapter;
     private List<DeviceInfoBean> deviceInfoBeanList = new ArrayList<>();
     LoadAgentViewModel loadAgentViewModel;
     private List<AgentFeed> agentFeedList = new ArrayList<>();
     private long mExitTime;
+    private HashMap<String,AgentFeed> agentMap = new HashMap<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,17 +65,12 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         initAdapter();
     }
 
+
+
     void initAdapter(){
-        for(int i=0;i<20;i++){
-            DeviceInfoBean deviceInfoBean = new DeviceInfoBean();
-            deviceInfoBean.setActive(100);
-            deviceInfoBean.setAgentname("代理商"+i);
-            deviceInfoBean.setHotelname("酒店"+i);
-            deviceInfoBean.setSignalstate("强");
-            deviceInfoBean.setProductid("201804000"+i);
-            deviceInfoBean.setAgentno("sdhashd");
-            deviceInfoBean.setCapacity((i+1)+"");
-            deviceInfoBeanList.add(deviceInfoBean);
+        if(baseAdapter!=null){
+            baseAdapter.notifyDataSetChanged();
+            return;
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this );
         //设置布局管理器
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         //设置为垂直布局，这也是默认的
         layoutManager.setOrientation(OrientationHelper. VERTICAL);
 
-        baseAdapter = new com.stroage.cloud.adapter.BaseAdapter() {
+        baseAdapter = new StrogeBaseAdapter() {
             @Override
             protected void onBindView(BaseViewHolder holder, int position) {
                 //设备编号
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
 
                 text_signal_state.setText(deviceInfoBean.getSignalstate());
                 text_hotel_name.setText(deviceInfoBean.getHotelname());
-
             }
 
             @Override
@@ -138,20 +136,6 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
 
     void initAgent(){
         final List<String> listBeans = new ArrayList<>();
-        for(int i=0;i<6;i++){
-            listBeans.add("代理商"+i);
-        }
-        niceSpinner.attachDataSource(listBeans);
-        niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String deviceType = listBeans.get(i);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
             @Override
             public void onCompleted() {
@@ -166,15 +150,40 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                     return ;
                 }
                 agentFeedList = agentListFeed.getPageList().getRows();
-                for(AgentFeed agentFeed : agentFeedList){
-                    SpinnerListBean spinnerListBean = new SpinnerListBean(agentFeed.getName(),agentFeed.getId()+"");
-                    listBeans.add(spinnerListBean.getAgentName());
+                for(int i=0;i<agentFeedList.size();i++){
+                    AgentFeed agentFeed = agentFeedList.get(i);
+                    listBeans.add(agentFeed.getName());
+                    agentMap.put(i+"",agentFeed);
                 }
                 niceSpinner.attachDataSource(listBeans);
                 niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String deviceType = listBeans.get(i);
+                        AgentFeed agentFeed = agentMap.get(i+"");
+                        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(1, 10, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
+                            @Override
+                            public void onCompleted() {
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("ddd",e.toString());
+                            }
+                            @Override
+                            public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
+                                if(deviceListInfoFeed!=null&&deviceListInfoFeed.getStatus().equals("success")){
+                                    try{
+                                        deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
+                                        //动态更新Adapter
+                                        initAdapter();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        });
+
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {

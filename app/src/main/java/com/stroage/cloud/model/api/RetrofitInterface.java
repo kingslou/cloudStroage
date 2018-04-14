@@ -44,7 +44,7 @@ public interface RetrofitInterface {
 
     //4查找代理商
     @Headers("Content-Type:application/json")
-    @POST("burnermanager/customer/findbyAgent")
+    @POST("burnermanager/customer/findbyagent")
     Observable<DeviceListInfoFeed> findbyAgent(@Body QueryDevicePoJo queryDevicePoJo);
 
     //5开锁 关锁 接口
