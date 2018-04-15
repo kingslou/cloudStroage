@@ -7,24 +7,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.stroage.cloud.EndLessOnScrollListener;
 import com.stroage.cloud.R;
+import com.stroage.cloud.StorageCallBack;
 import com.stroage.cloud.adapter.BaseViewHolder;
 import com.stroage.cloud.adapter.OnItemClickListener;
 import com.stroage.cloud.adapter.StrogeBaseAdapter;
 import com.stroage.cloud.bean.DeviceInfoBean;
 import com.stroage.cloud.model.api.RestDataSource;
+import com.stroage.cloud.model.api.StorageTask;
 import com.stroage.cloud.model.pojo.AgentPoJo;
+import com.stroage.cloud.model.pojo.FindByProductIdPoJo;
+import com.stroage.cloud.model.pojo.GetAllDevicePoJo;
 import com.stroage.cloud.model.pojo.QueryDevicePoJo;
 import com.stroage.cloud.model.usefeed.AgentFeed;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
+import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
+import com.stroage.cloud.utils.DialogBuilder;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
 import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
@@ -55,19 +67,64 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     private List<AgentFeed> agentFeedList = new ArrayList<>();
     private long mExitTime;
     private HashMap<String,AgentFeed> agentMap = new HashMap<>();
+    private ImageView imageSearch;
+    private EditText editSearch;
+    private int currentPageNo = 0;
+    private AgentFeed currentAgentFeed;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         niceSpinner = (NiceSpinner) findViewById(R.id.nice_spinner);
         mRecycleView = (RecyclerView)findViewById(R.id.recycleView);
+        imageSearch = (ImageView)findViewById(R.id.image_search);
+        editSearch = (EditText)findViewById(R.id.edit_search);
         initAgent();
-        initAdapter();
+        addSearchListener();
+        RestDataSource.findAllDeviceList(new GetAllDevicePoJo(1, 100), new Observer<DeviceListInfoFeed>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
+                List<DeviceInfoBean> ddd = deviceListInfoFeed.getPageList().getRows();
+            }
+        });
     }
 
 
+    private void addSearchListener(){
+        imageSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(editSearch.getText().toString())){
+                    return;
+                }
+                searchDeviceById();
+            }
+        });
 
-    void initAdapter(){
+        editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId== EditorInfo.IME_ACTION_SEARCH){
+                    if(editSearch.getText().toString()!=null){
+                        searchDeviceById();
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void initAdapter(){
         if(baseAdapter!=null){
             baseAdapter.notifyDataSetChanged();
             return;
@@ -95,12 +152,12 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                 DeviceInfoBean deviceInfoBean = deviceInfoBeanList.get(position);
                 text_capacity.setText(deviceInfoBean.getCapacity());
                 text_device_code.setText(deviceInfoBean.getProductid());
-                if(position%2==0){
+                if(deviceInfoBean.getTemp().equals("0")){
                     text_device_wd.setText("正常");
                     text_device_wd.setTextColor(getResources().getColor(R.color.color_heading_black));
                 }else{
                     text_device_wd.setTextColor(getResources().getColor(R.color.color_tab_tip_dot_bg));
-                    text_device_wd.setText("异常");
+                    text_device_wd.setText("高温");
                 }
 
                 text_signal_state.setText(deviceInfoBean.getSignalstate());
@@ -110,6 +167,11 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             @Override
             protected int getLayoutID(int position) {
                 return R.layout.item_devicelist;
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return super.getItemViewType(position);
             }
 
             @Override
@@ -128,15 +190,25 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent();
+                DeviceInfoBean deviceInfoBean = deviceInfoBeanList.get(position);
+                String deviceInfo = new Gson().toJson(deviceInfoBean);
+                intent.putExtra("deviceInfo",deviceInfo);
                 intent.setClass(MainActivity.this, MapLocationActivity.class);
                 startActivity(intent);
             }
         });
+
+        mRecycleView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                loadMoreDeviceList(currentPage);
+            }
+        });
     }
 
-    void initAgent(){
+    private void initAgent(){
         final List<String> listBeans = new ArrayList<>();
-        RestDataSource.getAgentList(new AgentPoJo(1,10),new Observer<AgentListFeed>() {
+        RestDataSource.getAgentList(new AgentPoJo(1,100),new Observer<AgentListFeed>() {
             @Override
             public void onCompleted() {
             }
@@ -159,39 +231,28 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                 niceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        String deviceType = listBeans.get(i);
+                        DialogBuilder.showLoading(MainActivity.this);
                         AgentFeed agentFeed = agentMap.get(i+"");
-                        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(1, 10, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
-                            @Override
-                            public void onCompleted() {
-                            }
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e("ddd",e.toString());
-                            }
-                            @Override
-                            public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
-                                if(deviceListInfoFeed!=null&&deviceListInfoFeed.getStatus().equals("success")){
-                                    try{
-                                        deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
-                                        //动态更新Adapter
-                                        initAdapter();
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                            }
-                        });
-
+                        currentAgentFeed = agentFeed;
+                        loadDeviceList(agentFeed,true);
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
 
                     }
                 });
+                //默认请求第一个供应商的设备列表
+                AgentFeed agentFeed = agentMap.get(0+"");
+                currentAgentFeed = agentFeed;
+                loadDeviceList(agentFeed,true);
             }
         });
+    }
+
+    private void loadMoreDeviceList(int currentPage){
+        //分页加载每页10条
+        currentPageNo = currentPage;
+        loadDeviceList(currentAgentFeed,false);
     }
 
 
@@ -203,6 +264,60 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     @Override
     public void onError(Throwable error) {
 
+    }
+
+    private void loadDeviceList(AgentFeed agentFeed, final boolean needClear){
+        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(currentPageNo, 2, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
+            @Override
+            public void onCompleted() {
+            }
+            @Override
+            public void onError(Throwable e) {
+                Log.e("ddd",e.toString());
+                DialogBuilder.hideDialog();
+            }
+            @Override
+            public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
+                if(deviceListInfoFeed!=null&&deviceListInfoFeed.getStatus().equals("success")){
+                    try{
+                        if(needClear){
+                            deviceInfoBeanList.clear();
+                            deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
+                        }else{
+                            deviceInfoBeanList.addAll(deviceListInfoFeed.getPageList().getRows());
+                        }
+                        //动态更新Adapter
+                        initAdapter();
+                        DialogBuilder.hideDialog();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    private void searchDeviceById(){
+        RestDataSource.findbyproductid(new FindByProductIdPoJo(editSearch.getText().toString()), new Observer<DeviceInfoFeed>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(DeviceInfoFeed deviceInfoFeed) {
+                if(deviceInfoFeed!=null && deviceInfoFeed.getStatus().equals("success")){
+                    deviceInfoBeanList.clear();
+                    deviceInfoBeanList.add(deviceInfoFeed.getData());
+                    initAdapter();
+                }
+            }
+        });
     }
 
     @Override

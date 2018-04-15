@@ -26,6 +26,7 @@ public class DeviceInfoBean {
     private String signalstate;
     private String agentname;
     private String agentno;
+    private String temp;
 
     public String getProductid() {
         return productid;
@@ -81,5 +82,13 @@ public class DeviceInfoBean {
 
     public void setAgentno(String agentno) {
         this.agentno = agentno;
+    }
+
+    public void setTemp(String temp) {
+        this.temp = temp;
+    }
+
+    public String getTemp() {
+        return temp;
     }
 }

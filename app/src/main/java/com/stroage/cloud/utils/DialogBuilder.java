@@ -16,6 +16,10 @@ public class DialogBuilder {
 
     public static MaterialDialog materialDialog;
 
+    public static void showLoading(Context context){
+        progressDialog(context,R.string.str_loading,R.string.str_loading);
+    }
+
     public static void progressDialog(Context context, int title, int content) {
          if(materialDialog!=null && materialDialog.isShowing()){
              materialDialog.dismiss();
