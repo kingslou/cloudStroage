@@ -28,10 +28,16 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
+import com.google.gson.Gson;
 import com.stroage.cloud.R;
+import com.stroage.cloud.bean.DeviceInfoBean;
 import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.UpdateLockPoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchClosePoJo;
+import com.stroage.cloud.model.pojo.UpdateSwitchOpenPoJo;
+import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.UpdateLockFeed;
+import com.stroage.cloud.view.main.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,6 +80,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
 
     Marker growMarker = null;
     private LatLng latlng;
+    private DeviceInfoBean deviceInfoBean;
 
 
     @Override
@@ -81,6 +88,10 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        if(getIntent()!=null){
+            String deviceInfo = getIntent().getStringExtra("deviceInfo");
+            deviceInfoBean = new Gson().fromJson(deviceInfo,DeviceInfoBean.class);
+        }
         mMapView = (MapView) findViewById(R.id.mapview);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         if (aMap == null) {
@@ -281,13 +292,66 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                 finish();
                 break;
             case R.id.btn_open_youfa:
+                RestDataSource.updateSwitchOpenStatus(new UpdateSwitchOpenPoJo(deviceInfoBean.getProductid(), 1), new Observer<BaseFeed>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MapLocationActivity.this,"error",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNext(BaseFeed baseFeed) {
+                        if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
+                            Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
                 break;
             case R.id.btn_close_youfa:
+                RestDataSource.updateSwitchCloseStatus(new UpdateSwitchClosePoJo(deviceInfoBean.getProductid(), 1), new Observer<BaseFeed>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MapLocationActivity.this,"error",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNext(BaseFeed baseFeed) {
+                        if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
+                            Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
                 break;
             case R.id.linner_open:
                 break;
             case R.id.btn_open_lock:
+                RestDataSource.updateLockCMD(new UpdateLockPoJo(deviceInfoBean.getProductid(), 1), new Observer<UpdateLockFeed>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MapLocationActivity.this,"error",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onNext(UpdateLockFeed updateLockFeed) {
+                        if(updateLockFeed!=null&&updateLockFeed.getStatus().equals("success")){
+                            Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
                 break;
             case R.id.btn_maintain:
                 if(linnerOpen.getVisibility()==View.VISIBLE){

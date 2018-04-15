@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     private HashMap<String,AgentFeed> agentMap = new HashMap<>();
     private ImageView imageSearch;
     private EditText editSearch;
-    private int currentPageNo = 0;
+    private int currentPageNo = 1;
     private AgentFeed currentAgentFeed;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,22 +81,6 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         editSearch = (EditText)findViewById(R.id.edit_search);
         initAgent();
         addSearchListener();
-        RestDataSource.findAllDeviceList(new GetAllDevicePoJo(1, 100), new Observer<DeviceListInfoFeed>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
-                List<DeviceInfoBean> ddd = deviceListInfoFeed.getPageList().getRows();
-            }
-        });
     }
 
 
@@ -200,8 +184,9 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
 
         mRecycleView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
             @Override
-            public void onLoadMore(int currentPage) {
-                loadMoreDeviceList(currentPage);
+            public void onLoadMore() {
+
+                loadMoreDeviceList();
             }
         });
     }
@@ -232,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         DialogBuilder.showLoading(MainActivity.this);
+                        currentPageNo=1;
                         AgentFeed agentFeed = agentMap.get(i+"");
                         currentAgentFeed = agentFeed;
                         loadDeviceList(agentFeed,true);
@@ -249,9 +235,9 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         });
     }
 
-    private void loadMoreDeviceList(int currentPage){
+    private void loadMoreDeviceList(){
         //分页加载每页10条
-        currentPageNo = currentPage;
+        currentPageNo++;
         loadDeviceList(currentAgentFeed,false);
     }
 
@@ -267,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     }
 
     private void loadDeviceList(AgentFeed agentFeed, final boolean needClear){
-        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(currentPageNo, 2, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
+        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(currentPageNo, 6, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
             @Override
             public void onCompleted() {
             }

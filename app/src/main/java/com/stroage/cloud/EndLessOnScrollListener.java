@@ -12,9 +12,6 @@ public abstract class EndLessOnScrollListener extends  RecyclerView.OnScrollList
     //声明一个LinearLayoutManager
     private LinearLayoutManager mLinearLayoutManager;
 
-    //当前页，从0开始
-    private int currentPage = 0;
-
     //已经加载出来的Item的数量
     private int totalItemCount;
 
@@ -53,12 +50,12 @@ public abstract class EndLessOnScrollListener extends  RecyclerView.OnScrollList
                 previousTotal = totalItemCount;
             }
         }
-
         //这里需要好好理解
         if (!loading && totalItemCount-visibleItemCount <= firstVisibleItem){
-            currentPage ++;
-            onLoadMore(currentPage);
-            loading = true;
+            if(totalItemCount>=6){
+                onLoadMore();
+                loading = true;
+            }
         }
     }
 
@@ -66,5 +63,5 @@ public abstract class EndLessOnScrollListener extends  RecyclerView.OnScrollList
      * 提供一个抽闲方法，在Activity中监听到这个EndLessOnScrollListener
      * 并且实现这个方法
      * */
-    public abstract void onLoadMore(int currentPage);
+    public abstract void onLoadMore();
 }
