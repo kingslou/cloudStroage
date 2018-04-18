@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         mRecycleView = (RecyclerView)findViewById(R.id.recycleView);
         imageSearch = (ImageView)findViewById(R.id.image_search);
         editSearch = (EditText)findViewById(R.id.edit_search);
-        initAgent();
         addSearchListener();
     }
 
@@ -185,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
         mRecycleView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
-
                 loadMoreDeviceList();
             }
         });
@@ -199,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             }
             @Override
             public void onError(Throwable e) {
+
             }
 
             @Override
@@ -327,5 +326,14 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        editSearch.setText("");
+        //todo 重新定位到第一个
+        initAgent();
+        currentPageNo = 1;
     }
 }
