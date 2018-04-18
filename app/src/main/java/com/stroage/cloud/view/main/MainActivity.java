@@ -298,9 +298,13 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             @Override
             public void onNext(DeviceInfoFeed deviceInfoFeed) {
                 if(deviceInfoFeed!=null && deviceInfoFeed.getStatus().equals("success")){
-                    deviceInfoBeanList.clear();
-                    deviceInfoBeanList.add(deviceInfoFeed.getData());
-                    initAdapter();
+                    if(deviceInfoFeed.getData()!=null){
+                        deviceInfoBeanList.clear();
+                        deviceInfoBeanList.add(deviceInfoFeed.getData());
+                        initAdapter();
+                    }else{
+                        Toast.makeText(MainActivity.this,"没有查询到信息",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
