@@ -129,11 +129,13 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     }
 
     public void hideFootView(){
-        mWrapperHolder.footview.setVisibility(View.GONE);
+        if(mWrapperHolder!=null){
+            mWrapperHolder.setFootViewVisibility(false);
+        }
     }
 
     public void setLoadItemState(boolean isLoading) {
-           mWrapperHolder.footview.setVisibility(View.VISIBLE);
+        mWrapperHolder.setFootViewVisibility(true);
         if (isLoading) {
             mWrapperHolder.setLoadText("正在加载...");
             mWrapperHolder.setLoadPbVisibility(true);
@@ -165,6 +167,10 @@ public class AdapterWrapper extends RecyclerView.Adapter {
 
         void setLoadPbVisibility(boolean show) {
             mLoadPb.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
+        void setFootViewVisibility(boolean show) {
+            footview.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 

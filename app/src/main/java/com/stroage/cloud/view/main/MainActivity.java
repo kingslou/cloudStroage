@@ -353,7 +353,12 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
             @Override
             public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
                 if (deviceListInfoFeed != null && deviceListInfoFeed.getStatus().equals("success")) {
+                    DialogBuilder.hideDialog();
                     try {
+                        total = deviceListInfoFeed.getPageList().getTotal();
+                        if(total<6){
+                            mAdapterWrapper.setLoadNoMore();
+                        }
                         if (needClear) {
                             deviceInfoBeanList.clear();
                             deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
@@ -365,7 +370,6 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                         }
                         //动态更新Adapter
                         initAdapter();
-                        DialogBuilder.hideDialog();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
