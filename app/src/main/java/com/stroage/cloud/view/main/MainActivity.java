@@ -22,9 +22,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.stroage.cloud.EndLessOnScrollListener;
 import com.stroage.cloud.R;
+import com.stroage.cloud.StorageCloudApp;
+import com.stroage.cloud.adapter.AdapterWrapper;
 import com.stroage.cloud.adapter.BaseViewHolder;
 import com.stroage.cloud.adapter.OnItemClickListener;
 import com.stroage.cloud.adapter.StorageBaseAdapter;
+import com.stroage.cloud.adapter.SwipeToLoadHelper;
 import com.stroage.cloud.bean.DeviceInfoBean;
 import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.AgentPoJo;
@@ -38,7 +41,6 @@ import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.utils.DialogBuilder;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
-import com.stroage.cloud.viewmodel.main.LoadAgentViewModel;
 
 import org.angmarch.views.NiceSpinner;
 
@@ -56,7 +58,7 @@ import rx.Observer;
  * @Description
  */
 
-public class MainActivity extends AppCompatActivity implements LoadAgentViewModel.AgentListener {
+public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper.LoadMoreListener {
 
     @BindView(R.id.nice_spinner)
     NiceSpinner niceSpinner;
@@ -75,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     private AgentFeed currentAgentFeed;
     //全部类别的默认识别码
     private String allNumberKey = "#all$$$***()(@#$##$$#";
+    private int total; //总数
+    private EndLessOnScrollListener endLessOnScrollListener;
+
+    private AdapterWrapper mAdapterWrapper;
+    private SwipeToLoadHelper mLoadMoreHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     }
 
     private void initAdapter() {
-        if (baseAdapter != null) {
-            baseAdapter.notifyDataSetChanged();
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.notifyDataSetChanged();
             return;
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -171,8 +178,14 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             public int getItemCount() {
                 return deviceInfoBeanList.size();
             }
+
         };
-        mRecycleView.setAdapter(baseAdapter);
+
+        mAdapterWrapper = new AdapterWrapper(baseAdapter);
+        mLoadMoreHelper = new SwipeToLoadHelper(mRecycleView, mAdapterWrapper);
+        mLoadMoreHelper.setLoadMoreListener(this);
+
+        mRecycleView.setAdapter(mAdapterWrapper);
         mRecycleView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -191,12 +204,26 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             }
         });
 
-        mRecycleView.addOnScrollListener(new EndLessOnScrollListener(layoutManager) {
+        endLessOnScrollListener = new EndLessOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                loadMoreDeviceList();
+                if(deviceInfoBeanList.size()<total){
+                    loadMoreDeviceList();
+                }else{
+                    Toast.makeText(StorageCloudApp.getContext(),"没有更多了",Toast.LENGTH_SHORT).show();
+                }
             }
-        });
+        };
+        //mRecycleView.addOnScrollListener(endLessOnScrollListener);
+    }
+
+    @Override
+    public void onLoad() {
+        if(total==deviceInfoBeanList.size()){
+            mAdapterWrapper.setLoadNoMore();
+        }else{
+            loadMoreDeviceList();
+        }
     }
 
     private void initAgent() {
@@ -233,6 +260,8 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         DialogBuilder.showLoading(MainActivity.this);
+                        //endLessOnScrollListener.resetPreviousTotal();
+                        mAdapterWrapper.hideFootView();
                         currentPageNo = 1;
                         AgentFeed agentFeed = agentMap.get((i-1) + "");
                         currentAgentFeed = agentFeed;
@@ -257,24 +286,13 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
     }
 
     private void loadMoreDeviceList() {
-        //分页加载每页10条
+        //分页加载每页6条
         currentPageNo++;
         if(currentAgentFeed.getNumber().equals(allNumberKey)){
             loadAllDeviceList(false);
         }else{
             loadDeviceList(currentAgentFeed, false);
         }
-    }
-
-
-    @Override
-    public void onLoaded(AgentFeed agentFeed) {
-
-    }
-
-    @Override
-    public void onError(Throwable error) {
-
     }
 
     /***
@@ -297,11 +315,15 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
             public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
                 if (deviceListInfoFeed != null && deviceListInfoFeed.getStatus().equals("success")) {
                     try {
+                        total = deviceListInfoFeed.getPageList().getTotal();
                         if (needClear) {
                             deviceInfoBeanList.clear();
                             deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
                         } else {
                             deviceInfoBeanList.addAll(deviceListInfoFeed.getPageList().getRows());
+                        }
+                        if(mLoadMoreHelper!=null){
+                            mLoadMoreHelper.setLoadMoreFinish();
                         }
                         //动态更新Adapter
                         initAdapter();
@@ -335,6 +357,9 @@ public class MainActivity extends AppCompatActivity implements LoadAgentViewMode
                             deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();
                         } else {
                             deviceInfoBeanList.addAll(deviceListInfoFeed.getPageList().getRows());
+                        }
+                        if(mLoadMoreHelper!=null){
+                            mLoadMoreHelper.setLoadMoreFinish();
                         }
                         //动态更新Adapter
                         initAdapter();

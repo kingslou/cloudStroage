@@ -60,7 +60,7 @@ public class DeviceListInfoFeed extends BaseFeed {
 
         private int pageNo;
         private int pageSize;
-        private String total;
+        private int total;
         private Object attributeMap;
         private List<DeviceInfoBean> rows;
 
@@ -80,11 +80,11 @@ public class DeviceListInfoFeed extends BaseFeed {
             this.pageSize = pageSize;
         }
 
-        public String getTotal() {
+        public int getTotal() {
             return total;
         }
 
-        public void setTotal(String total) {
+        public void setTotal(int total) {
             this.total = total;
         }
 

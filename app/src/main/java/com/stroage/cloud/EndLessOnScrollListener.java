@@ -27,6 +27,10 @@ public abstract class EndLessOnScrollListener extends  RecyclerView.OnScrollList
     //是否正在上拉数据
     private boolean loading = true;
 
+    public void resetPreviousTotal(){
+        previousTotal = 0;
+    }
+
     public EndLessOnScrollListener(LinearLayoutManager linearLayoutManager) {
         this.mLinearLayoutManager = linearLayoutManager;
     }
@@ -57,7 +61,7 @@ public abstract class EndLessOnScrollListener extends  RecyclerView.OnScrollList
                 loading = true;
             }
         }else{
-            previousTotal = 0;
+            Log.e("","");
         }
     }
 
