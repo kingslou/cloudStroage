@@ -37,7 +37,7 @@ import android.view.ViewGroup;
 /**
  * Created by jiang on 2/19/16.
  */
-public abstract class StrogeBaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public abstract class StorageBaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
 
     private OnItemClickListener onItemClickListener;
