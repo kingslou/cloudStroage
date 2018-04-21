@@ -1,5 +1,6 @@
 package com.stroage.cloud.view.login;
 
+import android.app.Application;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.stroage.cloud.model.api.RestDataSource;
 import com.stroage.cloud.model.pojo.LoginPoJo;
 import com.stroage.cloud.model.usefeed.LoginFeed;
 import com.stroage.cloud.utils.DialogBuilder;
+import com.stroage.cloud.utils.DialogFactory;
 import com.stroage.cloud.utils.SPUtil;
 import com.stroage.cloud.view.main.MainActivity;
 import com.stroage.cloud.viewmodel.login.LoginViewModel;
@@ -56,8 +58,14 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
         loginViewModel = new LoginViewModel(this);
         activityLoginBinding.setClickLogin(loginViewModel);
         isCheckAccount = SPUtil.getBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT);
-        Log.e("拿到的状态",isCheckAccount+"");
         mChecked.setChecked(isCheckAccount);
+        if(isCheckAccount){
+            LoginFeed loginFeed = new Gson().fromJson(SPUtil.getStringContentPreferences(this, AppConfig.CACHEUSER),LoginFeed.class);
+            if(loginFeed!=null && loginFeed.getUserFeed()!=null){
+                editPhone.setText(loginFeed.getUserFeed().getAccount());
+                editPwd.setText(SPUtil.getStringContentPreferences(this,AppConfig.CACHEPWD));
+            }
+        }
         mChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -68,13 +76,13 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
 
     @Override
     public void onLoginClick(LoginPoJo loginPoJo) {
-        editPhone.setText("admin");
-        editPwd.setText("bazong888");
+//        editPhone.setText("admin");
+//        editPwd.setText("bazong888");
         if (TextUtils.isEmpty(editPhone.getText().toString()) || TextUtils.isEmpty(editPwd.getText().toString())) {
-            DialogBuilder.infoDialog(getApplicationContext(), R.string.str_tip_text_warn, R.string.str_login_warn_text);
+            DialogBuilder.infoDialog(LoginActivity.this, R.string.str_tip_text_warn, R.string.str_login_warn_text);
             return;
         }
-        loginPoJo = new LoginPoJo(editPhone.getText().toString(),editPhone.getText().toString());
+        loginPoJo = new LoginPoJo(editPhone.getText().toString().trim(),editPwd.getText().toString().trim());
         DialogBuilder.progressDialog(LoginActivity.this,R.string.str_loading,R.string.str_empty);
         RestDataSource.login(loginPoJo, new Subscriber<LoginFeed>() {
             @Override
@@ -90,9 +98,18 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
             public void onNext(LoginFeed loginFeed) {
                 //保存登录信息
                 DialogBuilder.hideDialog();
+                if(loginFeed.getStatus().equals("failed")){
+                    DialogBuilder.infoDialog(LoginActivity.this, loginFeed.getErrorMsg());
+                    return ;
+                }
                 SPUtil.setBooleanPreferences(StorageCloudApp.getContext(),AppConfig.ISCHECKACCOUNT,isCheckAccount);
                 Log.e("保存的状态",isCheckAccount+"");
-                SPUtil.setStringContentPreferences(StorageCloudApp.getContext(), AppConfig.CACHEUSER,new Gson().toJson(loginFeed));
+                if(isCheckAccount){
+                    SPUtil.setStringContentPreferences(StorageCloudApp.getContext(), AppConfig.CACHEUSER,new Gson().toJson(loginFeed));
+                    SPUtil.setStringContentPreferences(StorageCloudApp.getContext(),AppConfig.CACHEPWD,editPwd.getText().toString());
+                }else{
+                    SPUtil.clearDataByKey(StorageCloudApp.getContext(), AppConfig.CACHEUSER);
+                }
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }

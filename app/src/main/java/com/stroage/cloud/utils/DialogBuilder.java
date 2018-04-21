@@ -32,6 +32,23 @@ public class DialogBuilder {
                 .progress(true, 0).show();
     }
 
+    public static void infoDialog(Context context,String content){
+        if(materialDialog!=null && materialDialog.isShowing()){
+            materialDialog.dismiss();
+            materialDialog = null;
+        }
+        materialDialog = new MaterialDialog.Builder(context)
+                .content(content)
+                .positiveText(R.string.dialog_action_ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+                .positiveColorRes(R.color.colorPrimary).show();
+    }
+
     public static void infoDialog(Context context, int title, int content) {
         if(materialDialog!=null && materialDialog.isShowing()){
             materialDialog.dismiss();

@@ -12,4 +12,6 @@ public class AppConfig {
     public static final String CACHEUSER = "CACHEUSER";
 
     public static final String ISCHECKACCOUNT = "ISCHECKACCOUNT";
+
+    public static final String CACHEPWD = "CACHEPWD";
 }
