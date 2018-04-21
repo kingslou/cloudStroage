@@ -261,7 +261,9 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         DialogBuilder.showLoading(MainActivity.this);
                         //endLessOnScrollListener.resetPreviousTotal();
-                        mAdapterWrapper.hideFootView();
+                        if(mAdapterWrapper!=null){
+                            mAdapterWrapper.hideFootView();
+                        }
                         currentPageNo = 1;
                         AgentFeed agentFeed = agentMap.get((i-1) + "");
                         currentAgentFeed = agentFeed;

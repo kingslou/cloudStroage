@@ -133,7 +133,6 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     }
 
     public void setLoadItemState(boolean isLoading) {
-
            mWrapperHolder.footview.setVisibility(View.VISIBLE);
         if (isLoading) {
             mWrapperHolder.setLoadText("正在加载...");
