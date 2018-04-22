@@ -327,6 +327,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     public void onNext(BaseFeed baseFeed) {
                         if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
                             Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(MapLocationActivity.this,baseFeed.getErrorMsg(),Toast.LENGTH_LONG).show();
                         }
                     }
                 });

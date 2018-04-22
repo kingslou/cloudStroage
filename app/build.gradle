@@ -9,6 +9,12 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${variant.name}-v${variant.versionName}-${buildType.name}.apk"
+        }
+    }
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.stroage.cloud"

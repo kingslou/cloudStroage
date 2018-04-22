@@ -146,8 +146,6 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                 ImageView image_device_status = holder.getView(R.id.image_device_status);
 
                 DeviceInfoBean deviceInfoBean = deviceInfoBeanList.get(position);
-                text_capacity.setText(deviceInfoBean.getCapacity());
-                text_device_code.setText(deviceInfoBean.getProductid());
                 if (deviceInfoBean.getTemp().equals("0")) {
                     text_device_wd.setText("正常");
                     text_device_wd.setTextColor(getResources().getColor(R.color.color_heading_black));
@@ -161,6 +159,23 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                 }else{
                     image_device_status.setImageResource(R.drawable.icon_tag_grey);
                 }
+                //剩余燃料
+                if(deviceInfoBean.getCapacity().equals("0")){
+                    text_capacity.setText("低液位");
+                    text_capacity.setTextColor(getResources().getColor(R.color.color_tab_tip_dot_bg));
+                }else if(deviceInfoBean.getCapacity().equals("100")){
+                    text_capacity.setTextColor(getResources().getColor(R.color.color_label_black));
+                    text_capacity.setText("高液位");
+                }else{
+                    if(!TextUtils.isEmpty(deviceInfoBean.getCapacity())){
+                        text_capacity.setTextColor(getResources().getColor(R.color.color_label_black));
+                        text_capacity.setText(deviceInfoBean.getCapacity()+"%");
+                    }
+                }
+
+                //设备编号
+                text_device_code.setText(deviceInfoBean.getProductid());
+                // 信号状态
                 text_signal_state.setText(deviceInfoBean.getSignalstate());
                 text_hotel_name.setText(deviceInfoBean.getHotelname());
             }
@@ -336,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
     }
 
     private void loadDeviceList(AgentFeed agentFeed, final boolean needClear) {
-        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(currentPageNo, 6, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
+        RestDataSource.findDevicebyAgent(new QueryDevicePoJo(currentPageNo, 100, agentFeed.getNumber()), new Observer<DeviceListInfoFeed>() {
             @Override
             public void onCompleted() {
             }
