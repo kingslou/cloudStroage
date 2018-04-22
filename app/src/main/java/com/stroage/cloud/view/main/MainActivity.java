@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         addSearchListener();
+        initAdapter();
         initAgent();
     }
 
@@ -260,10 +261,6 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         DialogBuilder.showLoading(MainActivity.this);
-                        //endLessOnScrollListener.resetPreviousTotal();
-                        if(mAdapterWrapper!=null){
-                            mAdapterWrapper.hideFootView();
-                        }
                         currentPageNo = 1;
                         AgentFeed agentFeed = agentMap.get((i-1) + "");
                         currentAgentFeed = agentFeed;
@@ -356,9 +353,6 @@ public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper
                     DialogBuilder.hideDialog();
                     try {
                         total = deviceListInfoFeed.getPageList().getTotal();
-                        if(total<6){
-                            mAdapterWrapper.setLoadNoMore();
-                        }
                         if (needClear) {
                             deviceInfoBeanList.clear();
                             deviceInfoBeanList = deviceListInfoFeed.getPageList().getRows();

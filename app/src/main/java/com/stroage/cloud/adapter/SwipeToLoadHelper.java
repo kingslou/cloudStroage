@@ -78,7 +78,11 @@ public class SwipeToLoadHelper extends RecyclerView.OnScrollListener {
                 } else if (lastCompletePosition == mLayoutManager.getItemCount() - 1) {
                     // 最后一项完全显示, 触发操作, 执行加载更多操作 禁用回弹判断
                     mLoading = true;
-                    mAdapterWrapper.setLoadItemState(true);
+                    if(mLayoutManager.getItemCount()<6){
+                        mAdapterWrapper.setLoadNoMore();
+                    }else{
+                        mAdapterWrapper.setLoadItemState(true);
+                    }
                     if (mListener != null) {
                         mListener.onLoad();
                     }
@@ -103,7 +107,12 @@ public class SwipeToLoadHelper extends RecyclerView.OnScrollListener {
     /** 设置LoadMore Item为加载完成状态, 上拉加载更多完成时调用 */
     public void setLoadMoreFinish() {
         mLoading = false;
-        mAdapterWrapper.setLoadItemState(false);
+        if(mLayoutManager.getItemCount()<6){
+            mAdapterWrapper.setLoadNoMore();
+        }else{
+            mAdapterWrapper.setLoadItemState(false);
+        }
+
     }
 
     /** 上拉操作触发时调用的接口 */
