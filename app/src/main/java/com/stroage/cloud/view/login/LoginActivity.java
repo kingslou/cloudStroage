@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.stroage.cloud.AppConfig;
+import com.stroage.cloud.BaseActivity;
 import com.stroage.cloud.R;
 import com.stroage.cloud.StorageCloudApp;
 import com.stroage.cloud.databinding.ActivityLoginBinding;
@@ -36,7 +37,7 @@ import rx.Subscriber;
  * @date 创建时间 2018/3/18
  * @Description
  */
-public class LoginActivity extends AppCompatActivity implements LoginViewModel.MainListener {
+public class LoginActivity extends BaseActivity implements LoginViewModel.MainListener {
 
     ActivityLoginBinding activityLoginBinding;
 
@@ -80,10 +81,11 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
 //        editPwd.setText("bazong888");
         if (TextUtils.isEmpty(editPhone.getText().toString()) || TextUtils.isEmpty(editPwd.getText().toString())) {
             DialogBuilder.infoDialog(LoginActivity.this, R.string.str_tip_text_warn, R.string.str_login_warn_text);
+            showErrorMsg("");
             return;
         }
         loginPoJo = new LoginPoJo(editPhone.getText().toString().trim(),editPwd.getText().toString().trim());
-        DialogBuilder.progressDialog(LoginActivity.this,R.string.str_loading,R.string.str_empty);
+        showLoading();
         RestDataSource.login(loginPoJo, new Subscriber<LoginFeed>() {
             @Override
             public void onCompleted() {
@@ -91,13 +93,13 @@ public class LoginActivity extends AppCompatActivity implements LoginViewModel.M
 
             @Override
             public void onError(Throwable e) {
-                DialogBuilder.hideDialog();
+                hideLoading();
             }
 
             @Override
             public void onNext(LoginFeed loginFeed) {
                 //保存登录信息
-                DialogBuilder.hideDialog();
+                hideLoading();
                 if(loginFeed.getStatus().equals("failed")){
                     DialogBuilder.infoDialog(LoginActivity.this, loginFeed.getErrorMsg());
                     return ;

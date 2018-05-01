@@ -33,7 +33,6 @@ ext {
     parcelerApiVersion = '1.0.4'
     parcelerVersion = '1.0.4'
     rxBindingVersion = '0.4.0'
-    materialDialogVersion = '0.9.0.0'
     circleImageViewVersion = '2.1.0'
     databindinglibary_version = "1.3.1"
     databindingadapter_version = "1.3.1"
@@ -61,7 +60,6 @@ ext {
     picasso = "com.squareup.picasso:picasso:$picassoVersion"
     parcelerApi = "org.parceler:parceler-api:$parcelerApiVersion"
     parceler = "org.parceler:parceler:$parcelerVersion"
-    materialDialog = "com.afollestad.material-dialogs:core:$materialDialogVersion"
     circleImage = "de.hdodenhof:circleimageview:$circleImageViewVersion"
     databindinglibary = "com.android.databinding:library:$databindinglibary_version"
     databinndingadapter = "com.android.databinding:adapters:$databindingadapter_version"

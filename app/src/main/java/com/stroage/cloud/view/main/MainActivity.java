@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.stroage.cloud.BaseActivity;
 import com.stroage.cloud.EndLessOnScrollListener;
 import com.stroage.cloud.R;
 import com.stroage.cloud.StorageCloudApp;
@@ -58,7 +59,7 @@ import rx.Observer;
  * @Description
  */
 
-public class MainActivity extends AppCompatActivity implements SwipeToLoadHelper.LoadMoreListener {
+public class MainActivity extends BaseActivity implements SwipeToLoadHelper.LoadMoreListener {
 
     @BindView(R.id.nice_spinner)
     NiceSpinner niceSpinner;

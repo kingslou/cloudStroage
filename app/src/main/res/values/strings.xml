@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">StorageCloud</string>
 
+    <string name="str_ok">确定</string>
+    <string name="str_cancel">取消</string>
+    <string name="str_tip">提示</string>
+
     <!-- tip -->
     <string name="str_tip_text_account">请输入账号</string>
     <string name="str_tip_text_pwd">请输入密码</string>

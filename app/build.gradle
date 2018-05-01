@@ -11,7 +11,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${variant.name}-v${variant.versionName}-${buildType.name}.apk"
+            outputFileName = "StorageCloud-v${variant.versionName}-${buildType.name}.apk"
         }
     }
 
@@ -73,7 +73,6 @@ dependencies {
     implementation rootProject.ext.retrofitLogging
     //ui
     implementation rootProject.ext.picasso
-    implementation rootProject.ext.materialDialog
     implementation rootProject.ext.circleImage
     //Parceler
     implementation rootProject.ext.parcelerApi
@@ -85,4 +84,7 @@ dependencies {
     implementation files('libs/Android_Map3D_SDK_V6.1.0_20180330.jar')
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
+        transitive = true
+    }
 }

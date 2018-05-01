@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -22,6 +23,7 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
@@ -29,6 +31,7 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.google.gson.Gson;
+import com.stroage.cloud.BaseActivity;
 import com.stroage.cloud.R;
 import com.stroage.cloud.bean.DeviceInfoBean;
 import com.stroage.cloud.model.api.RestDataSource;
@@ -37,6 +40,7 @@ import com.stroage.cloud.model.pojo.UpdateSwitchClosePoJo;
 import com.stroage.cloud.model.pojo.UpdateSwitchOpenPoJo;
 import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.UpdateLockFeed;
+import com.stroage.cloud.utils.DialogFactory;
 import com.stroage.cloud.view.main.MainActivity;
 
 import java.text.SimpleDateFormat;
@@ -53,7 +57,7 @@ import rx.Observer;
  * @Description
  */
 
-public class MapLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
+public class MapLocationActivity extends BaseActivity implements LocationSource, AMapLocationListener {
 
     @BindView(R.id.image_back)
     ImageView imageBack;
@@ -90,6 +94,7 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         ButterKnife.bind(this);
         if(getIntent()!=null){
             String deviceInfo = getIntent().getStringExtra("deviceInfo");
+            Log.e("deviceInfo",deviceInfo);
             deviceInfoBean = new Gson().fromJson(deviceInfo,DeviceInfoBean.class);
         }
         mMapView = (MapView) findViewById(R.id.mapview);
@@ -148,7 +153,15 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
     //定位回调函数
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
-
+        Double lat = 0.0,len = 0.0;
+        try{
+            lat = Double.parseDouble(deviceInfoBean.getLat());
+            len = Double.parseDouble(deviceInfoBean.getLng());;
+        }catch (Exception e){
+            e.printStackTrace();
+            lat =amapLocation.getLatitude();
+            len =amapLocation.getLongitude();
+        }
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
@@ -174,7 +187,9 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     //设置缩放级别
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     //将地图移动到定位点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(lat, len)));
+                    amapLocation.setLatitude(lat);
+                    amapLocation.setLongitude(len);
                     //点击定位按钮 能够将地图的中心移动到定位点
                     mListener.onLocationChanged(amapLocation);
                     //添加图钉
@@ -206,13 +221,13 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
         options.icon(BitmapDescriptorFactory
                 .defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         //位置
-        options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
-        //标题
-        options.title(buffer.toString());
-        //子标题
-        options.snippet("");
+        options.position(new LatLng(amapLocation.getLatitude(),amapLocation.getLongitude()));
+//        StringBuffer buffer = new StringBuffer();
+//        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+//        //标题
+//        options.title(buffer.toString());
+//        //子标题
+//        options.snippet("");
         //设置多少帧刷新一次图片资源
         options.period(60);
 
@@ -306,7 +321,9 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     @Override
                     public void onNext(BaseFeed baseFeed) {
                         if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
-                            Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                            DialogFactory.showDialog("打开成功",MapLocationActivity.this);
+                        }else{
+                            DialogFactory.showDialog("打开失败"+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
@@ -327,8 +344,9 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     public void onNext(BaseFeed baseFeed) {
                         if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
                             Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                            DialogFactory.showDialog("关闭成功"+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }else{
-                            Toast.makeText(MapLocationActivity.this,baseFeed.getErrorMsg(),Toast.LENGTH_LONG).show();
+                            DialogFactory.showDialog("关闭失败"+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
@@ -344,13 +362,15 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(MapLocationActivity.this,"error",Toast.LENGTH_LONG).show();
+                        DialogFactory.showDialog("开锁失败"+e.toString(),MapLocationActivity.this);
                     }
 
                     @Override
                     public void onNext(UpdateLockFeed updateLockFeed) {
                         if(updateLockFeed!=null&&updateLockFeed.getStatus().equals("success")){
-                            Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
+                            DialogFactory.showDialog("开锁成功",MapLocationActivity.this);
+                        }else{
+                            DialogFactory.showDialog("开锁失败"+updateLockFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
@@ -362,6 +382,8 @@ public class MapLocationActivity extends AppCompatActivity implements LocationSo
                     linnerOpen.setVisibility(View.VISIBLE);
                 }
                 break;
+                default:
+                    break;
         }
     }
 

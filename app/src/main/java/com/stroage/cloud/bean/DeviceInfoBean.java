@@ -27,6 +27,8 @@ public class DeviceInfoBean {
     private String agentname;
     private String agentno;
     private String temp;
+    private String lat;
+    private String lng;
 
     public String getProductid() {
         return productid;
@@ -90,5 +92,21 @@ public class DeviceInfoBean {
 
     public String getTemp() {
         return temp;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLng() {
+        return lng;
     }
 }
