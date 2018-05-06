@@ -176,8 +176,16 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
 
                 //设备编号
                 text_device_code.setText(deviceInfoBean.getProductid());
-                // 信号状态
-                text_signal_state.setText(deviceInfoBean.getSignalstate());
+                // 信号状态 1显示弱，2显示强  其他显示为无
+                String signalState = deviceInfoBean.getSignalstate();
+                if(signalState.equals("1")){
+                  signalState = "弱";
+                }else if(signalState.equals("2")){
+                    signalState = "强";
+                }else{
+                    signalState = "无";
+                }
+                text_signal_state.setText(signalState);
                 text_hotel_name.setText(deviceInfoBean.getHotelname());
             }
 
