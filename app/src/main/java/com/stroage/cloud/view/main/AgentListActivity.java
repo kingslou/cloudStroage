@@ -37,6 +37,7 @@ import com.stroage.cloud.model.usefeed.SearchAgentFeed;
 import com.stroage.cloud.utils.DialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -60,6 +61,7 @@ public class AgentListActivity extends BaseActivity {
     private List<AgentFeed> agentFeedList = new ArrayList<>();
     private StorageBaseAdapter baseAdapter;
     private List<AgentFeed> allAgentList = new ArrayList<>();
+    private List<AgentFeed> filterList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,17 @@ public class AgentListActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(TextUtils.isEmpty(charSequence.toString())){
+                    filterList.clear();
                     agentFeedList = allAgentList;
+                    initAdapter();
+                }else{
+                    for(Iterator<AgentFeed> iterator = allAgentList.iterator(); iterator.hasNext();){
+                        AgentFeed agentFeed = iterator.next();
+                        if (agentFeed.getName().contains(charSequence)&&!filterList.contains(charSequence)) {
+                            filterList.add(agentFeed);
+                        }
+                    }
+                    agentFeedList = filterList;
                     initAdapter();
                 }
             }
@@ -175,7 +187,7 @@ public class AgentListActivity extends BaseActivity {
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         mRecycleView.setAdapter(baseAdapter);
     }
-
+    //分销商数据比较简单，默认初始化100个分销商，加快搜索速度
     private void initAgent() {
         RestDataSource.getAgentList(new AgentPoJo(1, 100), new Observer<AgentListFeed>() {
             @Override
@@ -203,19 +215,18 @@ public class AgentListActivity extends BaseActivity {
         RestDataSource.getAgentListByName(new QueryAgentPoJo(editSearch.getText().toString()), new Observer<AgentListFeed>() {
             @Override
             public void onCompleted() {
-
             }
-
             @Override
             public void onError(Throwable e) {
                 Log.e("ee",e.toString());
             }
-
             @Override
             public void onNext(AgentListFeed agentListFeed) {
                 if(agentListFeed!=null && agentListFeed.getStatus().equals("success")){
-                    agentFeedList = agentListFeed.getDataList();
-                    initAdapter();
+                    if(agentListFeed.getDataList()!=null && agentListFeed.getDataList().size()!=0){
+                        agentFeedList = agentListFeed.getDataList();
+                        initAdapter();
+                    }
                 }
             }
         });
