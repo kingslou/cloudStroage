@@ -21,15 +21,15 @@ public class AgentListFeed extends BaseFeed {
      * errorMsg : null
      */
 
-    private Object dataList;
+    private List<AgentFeed> dataList;
     private Object data;
     private PageListBean pageList;
 
-    public Object getDataList() {
+    public List<AgentFeed> getDataList() {
         return dataList;
     }
 
-    public void setDataList(Object dataList) {
+    public void setDataList(List<AgentFeed> dataList) {
         this.dataList = dataList;
     }
 

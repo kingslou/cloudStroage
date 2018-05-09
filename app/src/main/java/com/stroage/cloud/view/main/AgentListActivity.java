@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -57,6 +59,7 @@ public class AgentListActivity extends BaseActivity {
     RecyclerView mRecycleView;
     private List<AgentFeed> agentFeedList = new ArrayList<>();
     private StorageBaseAdapter baseAdapter;
+    private List<AgentFeed> allAgentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,27 @@ public class AgentListActivity extends BaseActivity {
                 return false;
             }
         });
+
+        //如果用户清空输入框，那么继续显示全部分销商
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(TextUtils.isEmpty(charSequence.toString())){
+                    agentFeedList = allAgentList;
+                    initAdapter();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void initAdapter(){
@@ -123,6 +147,17 @@ public class AgentListActivity extends BaseActivity {
             public int getItemCount() {
                 return agentFeedList.size();
             }
+
+            public void clearData(){
+                agentFeedList.clear();
+                notifyDataSetChanged();
+            }
+
+            public void setData(List<AgentFeed> agentListFeed){
+                agentFeedList.addAll(agentListFeed);
+                notifyDataSetChanged();
+            }
+
         };
 
         baseAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -159,12 +194,13 @@ public class AgentListActivity extends BaseActivity {
                 }
                 agentFeedList = agentListFeed.getPageList().getRows();
                 initAdapter();
+                allAgentList =  agentListFeed.getPageList().getRows();
             }
         });
     }
 
     private void searchAgentByName(){
-        RestDataSource.getAgentListByName(new QueryAgentPoJo(editSearch.getText().toString()), new Observer<SearchAgentFeed>() {
+        RestDataSource.getAgentListByName(new QueryAgentPoJo(editSearch.getText().toString()), new Observer<AgentListFeed>() {
             @Override
             public void onCompleted() {
 
@@ -176,15 +212,12 @@ public class AgentListActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(SearchAgentFeed searchAgentFeed) {
-                if(searchAgentFeed!=null && searchAgentFeed.getStatus().equals("success")){
-
+            public void onNext(AgentListFeed agentListFeed) {
+                if(agentListFeed!=null && agentListFeed.getStatus().equals("success")){
+                    agentFeedList = agentListFeed.getDataList();
+                    initAdapter();
                 }
             }
         });
-    }
-
-    private void entityToAgent(){
-        AgentFeed agentFeed = new AgentFeed();
     }
 }

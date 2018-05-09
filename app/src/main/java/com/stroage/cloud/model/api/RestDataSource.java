@@ -82,7 +82,7 @@ public class RestDataSource {
      * @param queryAgentPoJo
      * @param observer
      */
-    public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<SearchAgentFeed> observer){
+    public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<AgentListFeed> observer){
         setSubscribe(getAPIService().getAgentListByName(queryAgentPoJo),observer);
     }
 

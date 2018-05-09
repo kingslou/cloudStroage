@@ -38,7 +38,7 @@ public interface RetrofitInterface {
     //2根据代理商名称获取代理商信息
     @Headers("Content-Type:application/json")
     @POST("burnermanager/agent/findByName")
-    Observable<SearchAgentFeed> getAgentListByName(@Body QueryAgentPoJo queryAgentPoJo);
+    Observable<AgentListFeed> getAgentListByName(@Body QueryAgentPoJo queryAgentPoJo);
 
     //3得到所有代理商列表
     @Headers("Content-Type:application/json")
