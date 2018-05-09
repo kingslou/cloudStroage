@@ -121,7 +121,7 @@ public class AgentListActivity extends BaseActivity {
                 }else{
                     for(Iterator<AgentFeed> iterator = allAgentList.iterator(); iterator.hasNext();){
                         AgentFeed agentFeed = iterator.next();
-                        if (agentFeed.getName().contains(charSequence)&&!filterList.contains(charSequence)) {
+                        if (agentFeed.getName().contains(charSequence)&&!existAgent(agentFeed)) {
                             filterList.add(agentFeed);
                         }
                     }
@@ -135,6 +135,15 @@ public class AgentListActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private boolean existAgent(AgentFeed agentFeed){
+        for(int i=0;i<filterList.size();i++){
+            if(filterList.get(i).getNumber().equals(agentFeed.getNumber())){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initAdapter(){
@@ -159,17 +168,6 @@ public class AgentListActivity extends BaseActivity {
             public int getItemCount() {
                 return agentFeedList.size();
             }
-
-            public void clearData(){
-                agentFeedList.clear();
-                notifyDataSetChanged();
-            }
-
-            public void setData(List<AgentFeed> agentListFeed){
-                agentFeedList.addAll(agentListFeed);
-                notifyDataSetChanged();
-            }
-
         };
 
         baseAdapter.setOnItemClickListener(new OnItemClickListener() {
