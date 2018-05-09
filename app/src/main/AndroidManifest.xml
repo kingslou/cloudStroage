@@ -51,6 +51,8 @@
             />
         <activity android:name=".view.map.MapLocationActivity"    android:screenOrientation="portrait"/>
 
+        <activity android:name=".view.main.AgentListActivity"    android:screenOrientation="portrait"/>
+
         <meta-data android:name="com.amap.api.v2.apikey" android:value="24e96d44b300b648a3b66a3e9463edf3">
         </meta-data>
 

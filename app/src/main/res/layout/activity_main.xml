@@ -19,6 +19,7 @@
                 app:title="@string/str_title_text_device_mange" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@drawable/spinner_bg"
@@ -35,9 +36,38 @@
                     android:layout_marginBottom="1dp"
                     android:layout_marginTop="1dp"
                     android:padding="@dimen/dimen_2"
-
                     />
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeSearchAgent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/spinner_bg">
+
+                <TextView
+                    android:id="@+id/edit_search_agent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:hint="点击选择分销商"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:padding="@dimen/dimen_2"
+                    android:src="@drawable/icond" />
+            </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -65,6 +95,7 @@
                     android:background="@null"
                     android:cursorVisible="true"
                     android:hint="请输入设备编号"
+                    android:gravity="center_vertical"
                     android:maxLines="1"
                     android:imeOptions="actionSearch"
                     android:paddingLeft="5dp"

@@ -14,6 +14,7 @@ import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
+import com.stroage.cloud.model.usefeed.SearchAgentFeed;
 import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
 import retrofit2.http.Body;
@@ -36,8 +37,8 @@ public interface RetrofitInterface {
 
     //2根据代理商名称获取代理商信息
     @Headers("Content-Type:application/json")
-    @POST("agent/findByName")
-    Observable<AgentListFeed> getAgentListByName(@Body QueryAgentPoJo queryAgentPoJo);
+    @POST("burnermanager/agent/findByName")
+    Observable<SearchAgentFeed> getAgentListByName(@Body QueryAgentPoJo queryAgentPoJo);
 
     //3得到所有代理商列表
     @Headers("Content-Type:application/json")

@@ -14,6 +14,7 @@ import com.stroage.cloud.model.usefeed.BaseFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
 import com.stroage.cloud.model.usefeed.LoginFeed;
+import com.stroage.cloud.model.usefeed.SearchAgentFeed;
 import com.stroage.cloud.model.usefeed.UpdateLockFeed;
 
 import okhttp3.OkHttpClient;
@@ -45,7 +46,6 @@ public class RestDataSource {
 
         OkHttpClient client = new OkHttpClient();
         //client.interceptors().add(logging);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(BASE_URL)
@@ -82,7 +82,7 @@ public class RestDataSource {
      * @param queryAgentPoJo
      * @param observer
      */
-    public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<AgentListFeed> observer){
+    public static void getAgentListByName(QueryAgentPoJo queryAgentPoJo,Observer<SearchAgentFeed> observer){
         setSubscribe(getAPIService().getAgentListByName(queryAgentPoJo),observer);
     }
 

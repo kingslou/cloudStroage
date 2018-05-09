@@ -72,50 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     .show();
         }
     }
-
-    public void showErrorTipsDialog(String errorInfo){
-        if(materialDialog!=null && materialDialog.isShowing()){
-            return;
-        }
-        materialDialog =  new MaterialDialog.Builder(this)
-                .title("警 告")
-                .content(errorInfo)
-                .positiveText("关 闭")
-                .neutralText("设置时间")
-                .titleGravity(GravityEnum.START)
-                .buttonsGravity(GravityEnum.CENTER)
-                .cancelable(false)
-                .limitIconToDefaultSize()
-                .maxIconSize(30)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        startActivity(intent);
-                        finish();
-                    }
-                }).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        Intent intent =  new Intent(Settings.ACTION_SETTINGS);
-                        startActivity(intent);
-//                        finish();
-                    }
-                })
-                .dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        if(materialDialog!=null){
-                            materialDialog = null;
-                        }
-                    }
-                })
-                .show();
-    }
-
+    
     public void showProgressDialog(int strId) {
         if(this.mDialog!=null&&this.mDialog.isShowing()){
             return;

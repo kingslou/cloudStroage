@@ -9,61 +9,19 @@ package com.stroage.cloud.model.usefeed;
 
 public class AgentFeed{
 
-
-    /**
-     * isNewRecord : false
-     * id : 1
-     * account : admin
-     * password : 21232f297a57a5a743894a0e4a801fc3
-     * name : 10
-     * sex : 男
-     * qq : 1010
-     * phone : 101
-     * email : 010
-     * number :
-     */
-
-    private boolean isNewRecord;
-    private int id;
-    private String account;
-    private String password;
+    private String id;
     private String name;
-    private String sex;
-    private String qq;
-    private String phone;
-    private String email;
+    private String content;
+    private String time;
+    private String choose;
     private String number;
 
-    public boolean isIsNewRecord() {
-        return isNewRecord;
-    }
-
-    public void setIsNewRecord(boolean isNewRecord) {
-        this.isNewRecord = isNewRecord;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -74,36 +32,28 @@ public class AgentFeed{
         this.name = name;
     }
 
-    public String getSex() {
-        return sex;
+    public String getContent() {
+        return content;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getQq() {
-        return qq;
+    public String getTime() {
+        return time;
     }
 
-    public void setQq(String qq) {
-        this.qq = qq;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getChoose() {
+        return choose;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setChoose(String choose) {
+        this.choose = choose;
     }
 
     public String getNumber() {

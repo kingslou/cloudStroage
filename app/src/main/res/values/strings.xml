@@ -14,6 +14,7 @@
     <string name="str_tip_text_warn">提示</string>
     <string name="str_login_warn_text">用户名密码不能为空</string>
     <string name="str_title_text_device_mange">设备管理</string>
+    <string name="str_title_agentlist_title">选择分销商</string>
     <string name="str_loading">加载中····</string>
     <string name="str_empty">""</string>
     <string name="str_warn">警告</string>
