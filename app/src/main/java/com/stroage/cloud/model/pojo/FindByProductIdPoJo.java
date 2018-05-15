@@ -9,8 +9,9 @@ package com.stroage.cloud.model.pojo;
 public class FindByProductIdPoJo {
 
 
-    public FindByProductIdPoJo(String productid) {
+    public FindByProductIdPoJo(String productid,String number) {
         this.productid = productid;
+        this.number = number;
     }
 
     /**
@@ -18,6 +19,7 @@ public class FindByProductIdPoJo {
      */
 
     private String productid;
+    private String number;
 
     public String getProductid() {
         return productid;
@@ -25,5 +27,13 @@ public class FindByProductIdPoJo {
 
     public void setProductid(String productid) {
         this.productid = productid;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getNumber() {
+        return number;
     }
 }

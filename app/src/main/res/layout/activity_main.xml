@@ -57,6 +57,7 @@
                     android:hint="点击选择分销商"
                     android:maxLines="1"
                     android:paddingLeft="10dp"
+                    android:layout_marginLeft="@dimen/dimen_16"
                     android:singleLine="true" />
 
                 <ImageView

@@ -39,6 +39,7 @@ import com.stroage.cloud.model.usefeed.AgentFeed;
 import com.stroage.cloud.model.usefeed.AgentListFeed;
 import com.stroage.cloud.model.usefeed.DeviceInfoFeed;
 import com.stroage.cloud.model.usefeed.DeviceListInfoFeed;
+import com.stroage.cloud.model.usefeed.LoginFeed;
 import com.stroage.cloud.utils.DialogBuilder;
 import com.stroage.cloud.utils.DisplayUtils;
 import com.stroage.cloud.view.map.MapLocationActivity;
@@ -85,12 +86,14 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
     private EndLessOnScrollListener endLessOnScrollListener;
     private AdapterWrapper mAdapterWrapper;
     private SwipeToLoadHelper mLoadMoreHelper;
+    private LoginFeed loginFeed;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        loginFeed = new Gson().fromJson(getIntent().getStringExtra("userInfo"),LoginFeed.class);
         addSearchListener();
         initAdapter();
         initAgent();
@@ -119,6 +122,12 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
             }
         });
 
+        if(!TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())){
+            relativeSearchAgent.setEnabled(false);
+            edit_search_agent.setText(loginFeed.getUserFeed().getAccount());
+        }else{
+            relativeSearchAgent.setEnabled(true);
+        }
         relativeSearchAgent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,12 +267,20 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
     }
 
     private void initAgent() {
-        //默认显示全部
-        AgentFeed agentFeedAll = new AgentFeed();
-        agentFeedAll.setName("全部");
-        agentFeedAll.setNumber(allNumberKey);
-        currentAgentFeed = agentFeedAll;
-        loadAllDeviceList(true);
+        //如果登录返回的信息为总部,默认显示全部
+        if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())){
+            AgentFeed agentFeedAll = new AgentFeed();
+            agentFeedAll.setName("全部");
+            agentFeedAll.setNumber(allNumberKey);
+            currentAgentFeed = agentFeedAll;
+            loadAllDeviceList(true);
+        }else{
+            AgentFeed agentFeed = new AgentFeed();
+            agentFeed.setName(loginFeed.getUserFeed().getName());
+            agentFeed.setNumber(loginFeed.getUserFeed().getNumber());
+            currentAgentFeed = agentFeed;
+            loadDeviceListByAgent(currentAgentFeed,true);
+        }
     }
 
     private void loadMoreDeviceList() {
@@ -362,7 +379,13 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
     }
 
     private void searchDeviceById() {
-        RestDataSource.findbyproductid(new FindByProductIdPoJo(editSearch.getText().toString()), new Observer<DeviceInfoFeed>() {
+        String agentNumber;
+        if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())){
+            agentNumber = "";
+        }else{
+            agentNumber = loginFeed.getUserFeed().getNumber();
+        }
+        RestDataSource.findbyproductid(new FindByProductIdPoJo(editSearch.getText().toString(),agentNumber), new Observer<DeviceInfoFeed>() {
             @Override
             public void onCompleted() {
             }

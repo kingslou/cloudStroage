@@ -74,7 +74,4 @@ public interface RetrofitInterface {
     @Headers("Content-Type:application/json")
     @POST("burnermanager/customer/findlist")
     Observable<DeviceListInfoFeed> findAllDeviceList(@Body GetAllDevicePoJo getAllDevicePoJo);
-
-
-
 }

@@ -77,8 +77,6 @@ public class LoginActivity extends BaseActivity implements LoginViewModel.MainLi
 
     @Override
     public void onLoginClick(LoginPoJo loginPoJo) {
-//        editPhone.setText("admin");
-//        editPwd.setText("bazong888");
         if (TextUtils.isEmpty(editPhone.getText().toString()) || TextUtils.isEmpty(editPwd.getText().toString())) {
             DialogBuilder.infoDialog(LoginActivity.this, R.string.str_tip_text_warn, R.string.str_login_warn_text);
             showErrorMsg("");
@@ -112,7 +110,10 @@ public class LoginActivity extends BaseActivity implements LoginViewModel.MainLi
                 }else{
                     SPUtil.clearDataByKey(StorageCloudApp.getContext(), AppConfig.CACHEUSER);
                 }
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("userInfo",new Gson().toJson(loginFeed));
+                intent.setClass(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });

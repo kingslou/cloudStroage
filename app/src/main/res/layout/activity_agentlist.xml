@@ -43,6 +43,7 @@
                 android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:paddingLeft="10dp"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textCursorDrawable="@null" />
 

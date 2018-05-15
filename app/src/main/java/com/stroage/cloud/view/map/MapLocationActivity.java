@@ -321,9 +321,9 @@ public class MapLocationActivity extends BaseActivity implements LocationSource,
                     @Override
                     public void onNext(BaseFeed baseFeed) {
                         if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
-                            DialogFactory.showDialog("打开成功，",MapLocationActivity.this);
+                            DialogFactory.showDialog("打开成功  ",MapLocationActivity.this);
                         }else{
-                            DialogFactory.showDialog("打开失败，"+baseFeed.getErrorMsg(),MapLocationActivity.this);
+                            DialogFactory.showDialog("打开失败  "+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
@@ -344,9 +344,9 @@ public class MapLocationActivity extends BaseActivity implements LocationSource,
                     public void onNext(BaseFeed baseFeed) {
                         if(baseFeed!=null&&baseFeed.getStatus().equals("success")){
                             Toast.makeText(MapLocationActivity.this,"success",Toast.LENGTH_LONG).show();
-                            DialogFactory.showDialog("关闭成功，"+baseFeed.getErrorMsg(),MapLocationActivity.this);
+                            DialogFactory.showDialog("关闭成功  "+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }else{
-                            DialogFactory.showDialog("关闭失败，"+baseFeed.getErrorMsg(),MapLocationActivity.this);
+                            DialogFactory.showDialog("关闭失败  "+baseFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
@@ -362,15 +362,15 @@ public class MapLocationActivity extends BaseActivity implements LocationSource,
 
                     @Override
                     public void onError(Throwable e) {
-                        DialogFactory.showDialog("开锁失败，"+e.toString(),MapLocationActivity.this);
+                        DialogFactory.showDialog("开锁失败  "+e.toString(),MapLocationActivity.this);
                     }
 
                     @Override
                     public void onNext(UpdateLockFeed updateLockFeed) {
                         if(updateLockFeed!=null&&updateLockFeed.getStatus().equals("success")){
-                            DialogFactory.showDialog("开锁成功，",MapLocationActivity.this);
+                            DialogFactory.showDialog("开锁成功  ",MapLocationActivity.this);
                         }else{
-                            DialogFactory.showDialog("开锁失败，"+updateLockFeed.getErrorMsg(),MapLocationActivity.this);
+                            DialogFactory.showDialog("开锁失败  "+updateLockFeed.getErrorMsg(),MapLocationActivity.this);
                         }
                     }
                 });
