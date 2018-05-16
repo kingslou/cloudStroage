@@ -60,14 +60,24 @@
                     android:singleLine="true" />
 
                 <ImageView
+                    android:id="@+id/image_s"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:padding="2dp"
+                    android:src="@drawable/icond" />
+                <ImageView
+                    android:visibility="gone"
                     android:id="@+id/image_clear"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
                     android:layout_marginRight="@dimen/dimen_16"
-                    android:padding="@dimen/dimen_2"
-                    android:src="@drawable/icond" />
+                    android:padding="6dp"
+                    android:src="@drawable/head_close" />
             </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>

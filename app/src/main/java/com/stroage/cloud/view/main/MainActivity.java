@@ -81,6 +81,9 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
     @BindView(R.id.image_clear)
     ImageView imageClear;
 
+    @BindView(R.id.image_s)
+    ImageView imageViewS;
+
     private StorageBaseAdapter baseAdapter;
     private List<DeviceInfoBean> deviceInfoBeanList = new ArrayList<>();
     private long mExitTime;
@@ -126,7 +129,9 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                     agentFeedAll.setNumber(allNumberKey);
                     currentAgentFeed = agentFeedAll;
                     loadAllDeviceList(true);
-                    imageClear.setImageResource(R.drawable.icond);
+                    edit_search_agent.setText("");
+                    imageClear.setVisibility(View.GONE);
+                    imageViewS.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -162,9 +167,6 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(refreshLayout.isRefreshing()){
-                    return;
-                }
                 currentPageNo = 1;
                 if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())) {
                     loadAllDeviceList(true);
@@ -344,10 +346,12 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
             @Override
             public void onError(Throwable e) {
                 DialogBuilder.hideDialog();
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
+                refreshLayout.setRefreshing(false);
                 if (deviceListInfoFeed != null && deviceListInfoFeed.getStatus().equals("success")) {
                     try {
                         total = deviceListInfoFeed.getPageList().getTotal();
@@ -387,10 +391,12 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
             public void onError(Throwable e) {
                 Log.e("ddd", e.toString());
                 DialogBuilder.hideDialog();
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onNext(DeviceListInfoFeed deviceListInfoFeed) {
+                refreshLayout.setRefreshing(false);
                 if (deviceListInfoFeed != null && deviceListInfoFeed.getStatus().equals("success")) {
                     DialogBuilder.hideDialog();
                     try {
@@ -470,7 +476,8 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                     edit_search_agent.setText(currentAgentFeed.getName());
                     currentPageNo = 1;
                     loadDeviceListByAgent(currentAgentFeed, true);
-                    imageClear.setImageResource(R.drawable.head_close);
+                    imageClear.setVisibility(View.VISIBLE);
+                    imageViewS.setVisibility(View.GONE);
                 }
                 break;
             default:
