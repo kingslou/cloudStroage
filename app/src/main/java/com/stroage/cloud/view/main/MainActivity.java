@@ -162,13 +162,12 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                 startActivityForResult(intent, REQUESTCODE);
             }
         });
-
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.blue),getResources().getColor(R.color.color_work_item_announce));
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 currentPageNo = 1;
-                if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())) {
+                if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber()) && currentAgentFeed.getNumber().equals(allNumberKey)) {
                     loadAllDeviceList(true);
                 }else{
                     loadDeviceListByAgent(currentAgentFeed,true);
