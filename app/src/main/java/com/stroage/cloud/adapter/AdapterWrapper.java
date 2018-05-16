@@ -124,14 +124,9 @@ public class AdapterWrapper extends RecyclerView.Adapter {
     }
 
     public void setLoadNoMore(){
+        mWrapperHolder.setFootViewVisibility(true);
         mWrapperHolder.setLoadText("没有更多数据了");
         mWrapperHolder.setLoadPbVisibility(false);
-    }
-
-    public void hideFootView(){
-        if(mWrapperHolder!=null){
-            mWrapperHolder.setFootViewVisibility(false);
-        }
     }
 
     public void setLoadItemState(boolean isLoading) {
