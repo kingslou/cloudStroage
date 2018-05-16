@@ -19,24 +19,23 @@
                 app:title="@string/str_title_text_device_mange" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="@drawable/spinner_bg"
+                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                >
+                android:background="@drawable/spinner_bg"
+                android:visibility="gone">
+
                 <org.angmarch.views.NiceSpinner
                     android:id="@+id/nice_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="1dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginBottom="1dp"
                     android:layout_marginTop="1dp"
-                    android:padding="@dimen/dimen_2"
-                    />
+                    android:padding="@dimen/dimen_2" />
             </LinearLayout>
 
             <RelativeLayout
@@ -53,14 +52,15 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:layout_marginLeft="@dimen/dimen_16"
                     android:gravity="center_vertical"
                     android:hint="点击选择分销商"
                     android:maxLines="1"
                     android:paddingLeft="10dp"
-                    android:layout_marginLeft="@dimen/dimen_16"
                     android:singleLine="true" />
 
                 <ImageView
+                    android:id="@+id/image_clear"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_alignParentRight="true"
@@ -82,9 +82,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:background="@drawable/edit_text_bg"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:background="@drawable/edit_text_bg">
+                android:focusableInTouchMode="true">
 
                 <EditText
                     android:id="@+id/edit_search"
@@ -95,10 +95,10 @@
                     android:layout_alignParentTop="true"
                     android:background="@null"
                     android:cursorVisible="true"
-                    android:hint="请输入设备编号"
                     android:gravity="center_vertical"
-                    android:maxLines="1"
+                    android:hint="请输入设备编号"
                     android:imeOptions="actionSearch"
+                    android:maxLines="1"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textCursorDrawable="@null" />
@@ -114,13 +114,18 @@
                     android:src="@drawable/icond" />
             </RelativeLayout>
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycleView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v7.widget.RecyclerView>
+            </android.support.v4.widget.SwipeRefreshLayout>
 
 
         </LinearLayout>

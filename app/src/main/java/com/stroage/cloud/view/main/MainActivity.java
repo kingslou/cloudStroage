@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +76,11 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
     TextView edit_search_agent;
     @BindView(R.id.relativeSearchAgent)
     RelativeLayout relativeSearchAgent;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.image_clear)
+    ImageView imageClear;
+
     private StorageBaseAdapter baseAdapter;
     private List<DeviceInfoBean> deviceInfoBeanList = new ArrayList<>();
     private long mExitTime;
@@ -110,6 +116,21 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
             }
         });
 
+        imageClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())) {
+                    currentPageNo = 1;
+                    AgentFeed agentFeedAll = new AgentFeed();
+                    agentFeedAll.setName("全部");
+                    agentFeedAll.setNumber(allNumberKey);
+                    currentAgentFeed = agentFeedAll;
+                    loadAllDeviceList(true);
+                    imageClear.setImageResource(R.drawable.icond);
+                }
+            }
+        });
+
         editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -134,6 +155,22 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, AgentListActivity.class);
                 startActivityForResult(intent, REQUESTCODE);
+            }
+        });
+
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.blue),getResources().getColor(R.color.color_work_item_announce));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(refreshLayout.isRefreshing()){
+                    return;
+                }
+                currentPageNo = 1;
+                if(TextUtils.isEmpty(loginFeed.getUserFeed().getNumber())) {
+                    loadAllDeviceList(true);
+                }else{
+                    loadDeviceListByAgent(currentAgentFeed,true);
+                }
             }
         });
     }
@@ -433,6 +470,7 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                     edit_search_agent.setText(currentAgentFeed.getName());
                     currentPageNo = 1;
                     loadDeviceListByAgent(currentAgentFeed, true);
+                    imageClear.setImageResource(R.drawable.head_close);
                 }
                 break;
             default:
