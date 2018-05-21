@@ -225,6 +225,9 @@ public class MainActivity extends BaseActivity implements SwipeToLoadHelper.Load
                     if (!TextUtils.isEmpty(deviceInfoBean.getCapacity())) {
                         text_capacity.setTextColor(getResources().getColor(R.color.color_label_black));
                         text_capacity.setText(deviceInfoBean.getCapacity() + "%");
+                    }else{
+                        text_capacity.setTextColor(getResources().getColor(R.color.color_label_black));
+                        text_capacity.setText("无");
                     }
                 }
 
